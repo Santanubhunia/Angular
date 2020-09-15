@@ -1,0 +1,40 @@
+<div fxLayout="column" class="full-height">
+  <h2 mat-dialog-title>Create Case</h2>
+  <mat-dialog-content
+    fxFlex="1 1 auto"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+  >
+    <div class="table">
+      <div class="table-row">
+        <div class="table-cell text-right">Child Name:</div>
+        <div class="table-cell">{{ data.childName }}</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell text-right">Date of Birth:</div>
+        <div class="table-cell">{{ data.dateOfBirth | date }}</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell text-right">Sponsor:</div>
+        <div class="table-cell">{{ data.sponsorName }}</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell text-right">Involvement:</div>
+        <div class="table-cell">
+          {{ data.childTypeId | lookup: 'childTypes' | async }}
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button class="button" mat-raised-button (click)="close()">Cancel</button>
+    <button
+      class="button"
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="true"
+    >
+      Create Case
+    </button>
+  </mat-dialog-actions>
+</div>

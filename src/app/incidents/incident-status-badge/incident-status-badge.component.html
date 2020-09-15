@@ -1,0 +1,10 @@
+<div
+  *ngIf="riskId"
+  [ngClass]="{
+    normative: riskId === 1,
+    cautionary: riskId === 2,
+    problematic: riskId === 3
+  }"
+>
+  {{ riskId | lookup: 'risks' | async }}
+</div>

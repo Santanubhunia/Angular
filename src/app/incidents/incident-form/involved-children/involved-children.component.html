@@ -1,0 +1,57 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="start center"
+  fxLayoutGap="1em"
+  class="full-width"
+  [formGroup]="involvedChildrenGroup"
+>
+  <mat-form-field appearance="outline">
+    <mat-label class="required">Number of children Involved</mat-label>
+    <input
+      matInput
+      id="numberOfPeopleInvovled"
+      type="number"
+      formControlName="numberOfChildrenInvolved"
+    />
+    <mat-hint>Number of children Involved</mat-hint>
+    <mat-error>
+      <app-errors
+        [errors]="involvedChildrenGroup.get('numberOfChildrenInvolved').errors"
+        [customErrors]="customErrors"
+      >
+      </app-errors>
+    </mat-error>
+  </mat-form-field>
+  <div class="item">
+    <mat-error *ngIf="involvedChildrenGroup.errors?.childrenRequired"
+      >At least one child must be added</mat-error
+    >
+  </div>
+  <div
+    fxLayout="column"
+    fxLayoutAlign="start center"
+    fxLayoutGap="1em"
+    class="full-width"
+  >
+    <app-person-lookup
+      class="item"
+      [isChild]="true"
+      (personSelected)="onChildSelected($event)"
+    ></app-person-lookup>
+    <app-child-detail-list
+      class="item"
+      *ngIf="childIncidentDetails?.length"
+      [incidentId]="incidentId"
+      [childDetails]="childIncidentDetails.value"
+      [showEducationSupportPlan]="showEducationSupportPlan"
+      (childEdited)="handleChildDetail($event)"
+      (childDeleted)="removeChildDetail($event)"
+      (gotoIncident)="onGotoIncident($event)"
+    ></app-child-detail-list>
+    <div class="item">
+      <a mat-raised-button color="accent" class="button" routerLink="child"
+        >Add Child</a
+      >
+    </div>
+  </div>
+</div>

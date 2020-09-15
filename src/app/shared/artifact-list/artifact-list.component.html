@@ -1,0 +1,32 @@
+<table class="full-width" aria-describedby="Artifacts">
+  <thead *ngIf="isView">
+    <tr class="view">
+      <th class="text-left" scope="col">
+        File Name
+      </th>
+      <th class="text-right" scope="col">Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let artifact of artifacts; let i = index">
+      <td>
+        <div fxLayout="row" fxLayoutGap="0.5em" fxLayoutAlign="start center">
+          <fa-duotone-icon
+            [icon]="fileTypes[artifact.fileExtension] || faFile"
+            size="lg"
+          ></fa-duotone-icon>
+          <span>{{ artifact.fileName }}</span>
+        </div>
+      </td>
+      <td class="text-right">{{ artifact.fileSize | fileSize }}</td>
+      <td *ngIf="!isView" class="text-right delete">
+        <button
+          mat-icon-button
+          (click)="artifactRemoved.emit({ index: i, artifactId: artifact.id })"
+        >
+          <fa-duotone-icon [icon]="faTrashAlt" size="lg"></fa-duotone-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

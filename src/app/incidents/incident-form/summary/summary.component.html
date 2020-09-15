@@ -1,0 +1,244 @@
+<div class="user-info" *ngIf="incident">
+  <div class="table">
+    <div class="table-row">
+      <div class="table-cell">Created By:</div>
+      <div class="table-cell">
+        {{ incident.createdBy | lookup: 'users' | async }}, FAP Admin
+      </div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Incident #:</div>
+      <div class="table-cell">{{ incident.incidentNumber }}</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Installation:</div>
+      <div class="table-cell">Nellis AFB</div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">Service:</div>
+      <div class="table-cell">AIR FORCE</div>
+    </div>
+  </div>
+</div>
+<div fxLayout="column" fxLayoutGap="1em">
+  <div fxLayout="row" fxLayoutGap="2em">
+    <div class="edit" fxLayout="column" fxLayoutAlign="start center">
+      <mat-icon svgIcon="edit" (click)="editSection(0)"></mat-icon>
+    </div>
+    <div fxLayout="column" fxLayoutGap="1em" fxFlex="auto">
+      <span class="summary-header">Incident Information</span>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Incident Date:
+        </div>
+        <div class="value">
+          {{ incidentForm.incidentDate | date: 'MMMM yyyy' }}
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Risk:
+        </div>
+        <div class="value">
+          {{ incidentForm.riskId | lookup: 'risks' | async }}
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Status:
+        </div>
+        <div class="value">
+          {{
+            !incidentForm.statusId
+              ? 'Draft'
+              : (incidentForm.statusId | lookup: 'incidentStates' | async)
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="2em">
+    <div class="edit" fxLayout="column" fxLayoutAlign="start center">
+      <mat-icon svgIcon="edit" (click)="editSection(1)"></mat-icon>
+    </div>
+    <div fxLayout="column" fxLayoutGap="1em" fxFlex="auto">
+      <span class="summary-header">Involved Children</span>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Number of children involved:
+        </div>
+        <div class="value">
+          {{ incidentForm.numberOfChildrenInvolved }}
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Involved children:
+        </div>
+        <div class="value">
+          <div fxLayout="row" fxLayoutGap="4em">
+            <div
+              fxLayout="column"
+              fxLayoutGap="0.5em"
+              *ngIf="exhibitingChildren && exhibitingChildren.length"
+            >
+              <span>Exhibiting</span>
+              <div *ngFor="let childDetail of exhibitingChildren" class="value">
+                {{ childDetail.child.firstName }}
+                {{ childDetail.child.lastName }},
+                {{ childDetail.ageAtIncident }}yo;
+              </div>
+            </div>
+            <div
+              fxLayout="column"
+              fxLayoutGap="0.5em"
+              *ngIf="impactedChildren && impactedChildren.length"
+            >
+              <span>Impacted</span>
+              <div *ngFor="let childDetail of impactedChildren" class="value">
+                {{ childDetail.child.firstName }}
+                {{ childDetail.child.lastName }},
+                {{ childDetail.ageAtIncident }}yo;
+              </div>
+            </div>
+            <div
+              fxLayout="column"
+              fxLayoutGap="0.5em"
+              *ngIf="
+                impactedAndExhibitingChildren &&
+                impactedAndExhibitingChildren.length
+              "
+            >
+              <span>Impacted and Exhibiting</span>
+              <div
+                *ngFor="let childDetail of impactedAndExhibitingChildren"
+                class="value"
+              >
+                {{ childDetail.child.firstName }}
+                {{ childDetail.child.lastName }},
+                {{ childDetail.ageAtIncident }}yo;
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="2em">
+    <div class="edit" fxLayout="column" fxLayoutAlign="start center">
+      <mat-icon svgIcon="edit" (click)="editSection(2)"></mat-icon>
+    </div>
+    <div fxLayout="column" fxLayoutGap="1em" fxFlex="auto">
+      <span class="summary-header">Incident Details</span>
+      <div fxLayout="row" fxLayoutGap="1em" *ngIf="showDetails">
+        <div class="section">
+          Safety Impact Level:
+        </div>
+        <div class="value">
+          {{ incidentForm.safetyImpactLevel ? 'High' : 'Low' }}
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          On/Off Installation:
+        </div>
+        <div class="value">
+          {{ incidentForm.occurredOnAnInstallation ? 'On' : 'Off' }}
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Description of Behavior:
+        </div>
+        <div class="value">
+          {{ incidentForm.allegations }}
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="1em" *ngIf="attachments">
+        <div class="section">
+          Attached Artifacts:
+        </div>
+        <div class="value">
+          {{ attachments }}
+        </div>
+      </div>
+      <ng-container *ngIf="showDetails">
+        <div fxLayout="row" fxLayoutGap="1em">
+          <div class="section">
+            Law Enforcement Contacted:
+          </div>
+          <div class="value">
+            {{ incidentForm.lawEnforcementContacted ? 'Yes' : 'No' }}
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="1em" *ngIf="incidentForm.safetyPlan">
+          <div class="section">
+            Safety Plan:
+          </div>
+          <div class="value">
+            {{ incidentForm.safetyPlan }}
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="1em">
+          <div class="section">
+            Services Offered:
+          </div>
+          <div class="value">
+            {{ incidentForm.servicesOffered ? 'Yes' : 'No' }}
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="1em">
+          <div class="section">
+            Services Accepted:
+          </div>
+          <div class="value">
+            {{ incidentForm.servicesAccepted ? 'Yes' : 'No' }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="2em">
+    <div class="edit" fxLayout="column" fxLayoutAlign="start center">
+      <mat-icon svgIcon="edit" (click)="editSection(3)"></mat-icon>
+    </div>
+    <div fxLayout="column" fxLayoutGap="1em" fxFlex="auto">
+      <span class="summary-header">Referrals</span>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Report Source:
+        </div>
+        <div class="value">
+          {{
+            incidentForm.referralSource.referralOrganizationId
+              | lookup: 'referralSourceOrganizations'
+              | async
+          }}
+        </div>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutGap="1em"
+        *ngIf="incidentForm.referralSource.referralPOC"
+      >
+        <div class="section">
+          Report Source POC:
+        </div>
+        <div class="value">
+          {{ incidentForm.referralSource.referralPOC }}
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div class="section">
+          Report Source Comments:
+        </div>
+        <div class="value">
+          {{ incidentForm.referralSource.referralComments }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

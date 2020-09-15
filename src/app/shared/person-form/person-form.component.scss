@@ -1,0 +1,23 @@
+mat-card {
+  width: 100%;
+  margin-top: 1em;
+  box-sizing: border-box;
+}
+
+.actions {
+  padding: 1em 2em;
+}
+
+mat-form-field {
+  width: auto;
+}
+
+.slide-toggle {
+  height: 54px;
+}
+
+@media (max-width: 599px) {
+  .slide-toggle {
+    width: 100%;
+  }
+}

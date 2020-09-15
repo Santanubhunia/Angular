@@ -1,0 +1,46 @@
+<p>Coming soon!</p>
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" fxFlexFill>
+  <div fxFlex="50" fxFlex.lt-md="1 1 auto" fxLayout="column" fxLayoutGap="1em">
+    <table class="mat-table full-width" aria-describedby="User Display">
+      <tr class="mat-header-row text-center">
+        <th class="mat-header-cell text-center" scope="col">Display Name</th>
+        <th class="mat-header-cell text-center" scope="col">Roles</th>
+        <th class="mat-header-cell text-center" scope="col">Manage</th>
+      </tr>
+      <tr class="mat-row" *ngFor="let user of users$ | async">
+        <td class="mat-cell text-center">{{ user.displayName }}</td>
+        <td class="mat-cell text-center">
+          {{ user.roles | join | role }}
+        </td>
+        <td class="mat-cell text-center">
+          <div fxLayout="row" fxLayoutAlign="center">
+            <button mat-icon-button [routerLink]="['edit', user.id]">
+              <mat-icon svgIcon="edit"></mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              (click)="deleteUser(user.id)"
+              *ngIf="!user.roles.includes('administrator')"
+            >
+              <mat-icon svgIcon="delete"></mat-icon>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div>
+      <button
+        mat-raised-button
+        color="accent"
+        routerLink="new"
+        *ngIf="!isChildActive"
+        class="button"
+      >
+        Create User
+      </button>
+    </div>
+  </div>
+  <div fxFlex="50" fxFlex.lt-md="1 1 auto">
+    <router-outlet></router-outlet>
+  </div>
+</div>

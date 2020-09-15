@@ -1,0 +1,186 @@
+<ng-container *ngIf="person$ | async as person">
+  <mat-dialog-content>
+    <div fxLayout="column" fxLayoutGap="1em">
+      <h2>{{ person.firstName }} {{ person.lastName }}</h2>
+      <div
+        *ngIf="
+          person.addresses.length &&
+          (person.addresses[0].street ||
+            person.addresses[0].unit ||
+            person.addresses[0].city ||
+            person.addresses[0].stateId !== undefined ||
+            person.addresses[0].zipCode ||
+            person.addresses[0].country)
+        "
+      >
+        <h3>Address Information</h3>
+        <div fxLayout="column">
+          <span *ngIf="person.addresses[0].street">{{
+            person.addresses[0].street
+          }}</span>
+          <span *ngIf="person.addresses[0].unit">{{
+            person.addresses[0].unit
+          }}</span>
+          <span
+            *ngIf="
+              person.addresses[0].city ||
+              person.addresses[0].stateId !== undefined ||
+              person.addresses[0].zipCode
+            "
+            ><span *ngIf="person.addresses[0].city">{{
+              person.addresses[0].city
+            }}</span
+            >,
+            <span *ngIf="person.addresses[0].stateId !== undefined">{{
+              person.addresses[0].stateId | lookup: 'states' | async
+            }}</span>
+            <span *ngIf="person.addresses[0].zipCode">
+              {{ person.addresses[0].zipCode }}</span
+            ></span
+          >
+          <span>{{ person.addresses[0].country }}</span>
+        </div>
+      </div>
+      <div>
+        <h3>Demographics</h3>
+        <div fxLayout="column">
+          <span
+            >Date of Birth: {{ person.dateOfBirth | date: 'shortDate' }}</span
+          >
+          <span>Sex: {{ person.genderId | lookup: 'genders' | async }}</span>
+          <span *ngIf="!data.isChild && adult"
+            >Relationship:
+            {{ adult.adultTypeId | lookup: 'adultTypes' | async }}</span
+          >
+        </div>
+      </div>
+      <div>
+        <h3>Identification</h3>
+        <div fxLayout="column">
+          <span
+            *ngIf="
+              person.protectedInformation.length &&
+              person.protectedInformation[0].value
+            "
+            >SSN: {{ person.protectedInformation[0].value }}</span
+          >
+          <span *ngIf="person.doDId">DoD-ID: {{ person.doDId }}</span>
+          <span *ngIf="data.isChild"
+            >Beneficiary: {{ child.beneficiary ? 'Yes' : 'No' }}</span
+          >
+        </div>
+      </div>
+      <ng-container *ngIf="data.isChild; else adultView">
+        <div *ngIf="child?.associatedAdults?.length">
+          <h3>Related Persons</h3>
+          <table class="full-width" aria-describedby="List of adults">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Employment Status</th>
+                <th scope="col">Relationship To Child</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let adult of child?.associatedAdults">
+                <td
+                  ><a (click)="viewAdult(adult.id)"
+                    >{{ adult.firstName }} {{ adult.lastName }}</a
+                  ></td
+                >
+                <td>
+                  {{
+                    adult.employmentStatusId
+                      | lookup: 'employmentStatuses'
+                      | async
+                  }}
+                </td>
+                <td>
+                  {{ adult.adultTypeId | lookup: 'adultTypes' | async }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-template #adultView>
+        <div
+          *ngIf="
+            (adult?.phoneNumbers?.length && adult.phoneNumbers[0].number) ||
+            (adult?.emailAddresses?.length && adult.emailAddresses[0].address)
+          "
+        >
+          <h3>Contact Information</h3>
+          <div fxLayout="column">
+            <span
+              *ngIf="
+                adult?.phoneNumbers?.length && adult.phoneNumbers[0].number
+              "
+              >Phone: {{ adult.phoneNumbers[0].number }}</span
+            >
+            <span
+              *ngIf="
+                adult?.emailAddresses?.length && adult.emailAddresses[0].address
+              "
+              >Email: {{ adult.emailAddresses[0].address }}</span
+            >
+          </div>
+        </div>
+        <div *ngIf="adult">
+          <h3>Location</h3>
+          <div fxLayout="column">
+            <span
+              >Service:
+              {{
+                adult.militaryBranchId | lookup: 'militaryBranches' | async
+              }}</span
+            >
+            <span
+              >Installation:
+              {{ adult.installationId | lookup: 'installations' | async }}</span
+            >
+          </div>
+        </div>
+        <div *ngIf="adult">
+          <div fxLayout="column">
+            <span
+              >Employment Status:
+              {{
+                adult.employmentStatusId | lookup: 'employmentStatuses' | async
+              }}</span
+            >
+            <ng-container *ngIf="adult.employmentStatusId === 1">
+              <span
+                >Command:
+                {{ adult.commandId | lookup: 'commands' | async }}</span
+              >
+              <span>Rank: {{ adult.rankId | lookup: 'ranks' | async }}</span>
+              <span
+                >Pay Grade:
+                {{ adult.payGradeId | lookup: 'payGrades' | async }}</span
+              >
+              <span>Unit: {{ adult.unit }}</span>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      mat-stroked-button
+      class="button stroked-button"
+      type="button"
+      (click)="close()"
+      >Cancel</button
+    >
+    <button
+      mat-raised-button
+      type="button"
+      color="accent"
+      class="button"
+      (click)="editPerson(person)"
+      >Edit{{ data.isChild ? ' Child' : '' }}</button
+    >
+  </mat-dialog-actions>
+</ng-container>

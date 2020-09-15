@@ -1,0 +1,46 @@
+<div class="full-height">
+  <mat-card>
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+      <mat-card-title>Case Notes ({{ caseNotes.length }})</mat-card-title>
+      <div>
+        <button mat-flat-button (click)="manageCaseNotes()">
+          View/Add Notes
+        </button>
+      </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="caseNotes.length">
+      <div fxLayout="row" fxLayoutGap="1em">
+        <div fxFlex="calc(85% - 1em)" class="case-note">
+          {{ caseNotes[index].value }}
+        </div>
+        <div fxFlex="calc(15% - 1em)" fxLayout="column" class="case-details">
+          <div>{{ caseNotes[index].createdBy | lookup: 'users' | async }}</div>
+          <div>{{ caseNotes[index].createdDate | date: 'MM/dd/yyyy' }}</div>
+          <div>
+            {{ caseNotes[index].clinical ? 'CLINICAL' : 'NON-CLINICAL' }}
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-footer>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="end center"
+        class="case-note-footer"
+        *ngIf="caseNotes.length"
+      >
+        <span> Showing note {{ index + 1 }} of {{ caseNotes.length }} </span>
+        <button
+          mat-icon-button
+          (click)="previous()"
+          [disabled]="disablePrevious"
+        >
+          <mat-icon svgIcon="previous"></mat-icon>
+        </button>
+        <button mat-icon-button (click)="next()" [disabled]="disableNext">
+          <mat-icon svgIcon="next"></mat-icon>
+        </button>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</div>

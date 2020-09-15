@@ -1,0 +1,23 @@
+<ng-container *ngIf="breadcrumbs$ | async as breadcrumbs">
+  <div fxLayout="row wrap" *ngIf="breadcrumbs?.length > 1" class="container">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      *ngFor="let breadcrumb of breadcrumbs; let i = index"
+      class="breadcrumb"
+    >
+      <mat-icon *ngIf="i !== 0" svgIcon="chevron_right"></mat-icon>
+      <a
+        mat-button
+        [routerLink]="breadcrumb.url"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <ng-container *ngIf="i === 0">
+          <mat-icon svgIcon="arrow_back"></mat-icon>
+        </ng-container>
+        {{ breadcrumb.label }}
+      </a>
+    </div>
+  </div>
+</ng-container>

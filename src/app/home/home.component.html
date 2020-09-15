@@ -1,0 +1,58 @@
+<div fxLayout="column" fxLayoutGap="1em">
+  <p>Coming soon!</p>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <button
+      mat-raised-button
+      fxFlex="25"
+      fxFlex.lt-md="100"
+      *appRole="{ roles: ['fap supervisor', 'fap admin'] }"
+    >
+      <h3 class="text-center">
+        {{ activeIncidentCount$ | async }} Active Incidents
+      </h3>
+    </button>
+    <button
+      mat-raised-button
+      fxFlex="25"
+      fxFlex.lt-md="100"
+      *appRole="{ roles: ['fap supervisor'] }"
+    >
+      <h3 class="text-center">
+        {{ recentlyUpdatedIncidentCount$ | async }} Recently Updated
+      </h3>
+    </button>
+    <button
+      mat-raised-button
+      fxFlex="25"
+      fxFlex.lt-md="100"
+      color="accent"
+      *appRole="{
+        roles: [
+          'fap supervisor',
+          'fap admin',
+          'clinical case manager',
+          'non-clinical case manager'
+        ]
+      }"
+      (click)="createNewIncident()"
+      class="pointer"
+    >
+      <h3>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon svgIcon="add"></mat-icon> New Incident
+        </div>
+      </h3>
+    </button>
+  </div>
+  <app-incident-list
+    displayOnly="true"
+    *appRole="{
+      roles: [
+        'fap supervisor',
+        'fap admin',
+        'clinical case manager',
+        'non-clinical case manager'
+      ]
+    }"
+  ></app-incident-list>
+</div>

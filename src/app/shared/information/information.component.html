@@ -1,0 +1,36 @@
+<div
+  *ngIf="useFlex; else noFlex"
+  fxLayout="row"
+  fxLayoutGap="0.5em"
+  fxLayoutAlign="start center"
+>
+  <ng-content *ngTemplateOutlet="unwrapped"></ng-content>
+  <fa-duotone-icon
+    [icon]="faInfoCircle"
+    #tooltip="matTooltip"
+    mat-icon-button
+    [matTooltip]="information"
+    [matTooltipPosition]="tooltipPosition"
+    matTooltipClass="information-tooltip"
+    (click)="tooltip.toggle()"
+  ></fa-duotone-icon>
+</div>
+<ng-template #noFlex>
+  <div fxLayout="row" fxLayoutGap="0.5em">
+    <ng-content *ngTemplateOutlet="unwrapped"></ng-content>
+    <div [style.paddingTop]="paddingTop">
+      <fa-duotone-icon
+        [icon]="faInfoCircle"
+        #tooltip="matTooltip"
+        mat-icon-button
+        [matTooltip]="information"
+        [matTooltipPosition]="tooltipPosition"
+        matTooltipClass="information-tooltip"
+        (click)="tooltip.toggle()"
+      ></fa-duotone-icon>
+    </div>
+  </div>
+</ng-template>
+<ng-template #unwrapped>
+  <ng-content></ng-content>
+</ng-template>

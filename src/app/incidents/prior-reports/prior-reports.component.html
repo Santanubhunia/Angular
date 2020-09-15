@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>
+  List of Prior Reports
+  <br />
+  <span class="subtitle"
+    >This is a list of the prior reports for:
+    <strong>{{ data.child.firstName }} {{ data.child.lastName }}</strong></span
+  >
+</h2>
+<mat-dialog-content>
+  <ng-container *ngIf="incidents$ | async as incidents; else loading">
+    <table
+      class="full-width mat-table"
+      aria-describedby="Prior Incident Details"
+    >
+      <thead>
+        <tr class="mat-header-row">
+          <th class="mat-header-cell" scope="col">Case/Incident ID</th>
+          <th class="mat-header-cell" scope="col">Age</th>
+          <th class="text-left mat-header-cell" scope="col">Category</th>
+          <th class="text-left mat-header-cell" scope="col">Involvement</th>
+          <th class="text-left mat-header-cell" scope="col">Status</th>
+          <th class="text-left mat-header-cell" scope="col">Date Open</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let incident of incidents" class="mat-row">
+          <td class="text-left mat-cell">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="1em">
+              <mat-icon svgIcon="description" color="primary"></mat-icon>
+              <a (click)="gotoIncident(incident.id)">
+                <span>{{ incident.incidentNumber }}</span>
+              </a>
+            </div>
+          </td>
+          <td class="text-center mat-cell">
+            {{ incident.childIncidentDetails[0].ageAtIncident }}
+          </td>
+          <td class="mat-cell">
+            {{ incident.riskId | lookup: 'risks' | async }}
+          </td>
+          <td class="mat-cell">
+            {{
+              incident.childIncidentDetails[0].childTypeId
+                | lookup: 'childTypes'
+                | async
+            }}
+          </td>
+          <td class="mat-cell">
+            {{ incident.statusId | lookup: 'incidentStates' | async }}
+          </td>
+          <td class="mat-cell">
+            {{ incident.incidentDate | date }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #loading>
+    <app-loader></app-loader>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="button" color="accent" mat-raised-button (click)="close()">
+    Close
+  </button>
+</mat-dialog-actions>

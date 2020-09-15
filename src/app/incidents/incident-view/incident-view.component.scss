@@ -1,0 +1,66 @@
+fa-duotone-icon {
+  color: #355d88;
+  font-size: 24px;
+}
+
+.edit-incident {
+  margin-top: -36px;
+  color: #355d88;
+  height: 34px;
+  width: 34px;
+  background-color: #b6c4d6;
+  border-radius: 50%;
+}
+
+.header {
+  &.normative {
+    border-left: 15px solid #4dbb81;
+  }
+
+  &.cautionary {
+    border-left: 15px solid #e6ba30;
+  }
+
+  & .problematic {
+    border-left: 15px solid #c75856;
+  }
+
+  fa-duotone-icon {
+    font-size: 32px;
+  }
+}
+
+.comment {
+  white-space: pre-wrap;
+}
+
+.container {
+  box-sizing: border-box;
+}
+
+.field {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.incident-id {
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.menu {
+  font-size: 14px;
+}
+
+.referred-to {
+  margin-bottom: 0 !important;
+}
+
+.referred-to-pager {
+  font-size: small;
+}
+
+.table-row {
+  .table-cell:first-child {
+    padding-right: 1em;
+  }
+}

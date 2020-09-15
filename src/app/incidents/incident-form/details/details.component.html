@@ -1,0 +1,255 @@
+<div
+  fxLayout="row"
+  fxLayoutGap="1em"
+  class="full-width"
+  [formGroup]="detailsGroup"
+>
+  <div fxLayout="column" fxFlex="calc(50% - 1em)">
+    <div
+      class="slide-toggle"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <span>Safety Impact Level</span>
+      <div fxLayout="row" fxLayoutGap="2em" fxLayoutAlign="start center">
+        <mat-slide-toggle
+          #safetyImpactLevel
+          formControlName="safetyImpactLevel"
+          id="safetyImpactLevel"
+        ></mat-slide-toggle>
+        <span class="slide-toggle-response">{{
+          safetyImpactLevel.checked ? 'High' : 'Low'
+        }}</span>
+      </div>
+    </div>
+    <div
+      class="slide-toggle"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <span>On/Off Installation</span>
+      <div fxLayout="row" fxLayoutGap="2em" fxLayoutAlign="start center">
+        <mat-slide-toggle
+          #occurredOnAnInstallation
+          formControlName="occurredOnAnInstallation"
+          id="occurredOnAnInstallation"
+        ></mat-slide-toggle>
+        <span class="slide-toggle-response">{{
+          occurredOnAnInstallation.checked ? 'On' : 'Off'
+        }}</span>
+      </div>
+    </div>
+    <div
+      class="slide-toggle"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <span>Law Enforcement Contacted</span>
+      <div fxLayout="row" fxLayoutGap="2em" fxLayoutAlign="start center">
+        <mat-slide-toggle
+          #lawEnforcementContacted
+          formControlName="lawEnforcementContacted"
+          id="lawEnforcementContacted"
+        >
+        </mat-slide-toggle>
+        <span class="slide-toggle-response">{{
+          lawEnforcementContacted.checked ? 'Yes' : 'No'
+        }}</span>
+      </div>
+    </div>
+    <mat-form-field
+      appearance="outline"
+      *ngIf="detailsGroup.get('lawEnforcementContactedDate')"
+    >
+      <mat-label>Date</mat-label>
+      <input
+        matInput
+        id="lawEnforcementContactedDate"
+        [max]="maxDate"
+        [matDatepicker]="lawEnforcementContactedDate"
+        placeholder="MM/DD/YYYY"
+        formControlName="lawEnforcementContactedDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        id="lawEnforcementContactedDateToggle"
+        [for]="lawEnforcementContactedDate"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #lawEnforcementContactedDate></mat-datepicker>
+      <mat-hint>Date for the Law Enforcement Contacted</mat-hint>
+      <mat-error>
+        <app-errors
+          [errors]="detailsGroup.get('lawEnforcementContactedDate').errors"
+        ></app-errors>
+      </mat-error>
+    </mat-form-field>
+    <div
+      formGroupName="lawEnforcementContactedComments"
+      *ngIf="detailsGroup.get('lawEnforcementContactedComments')"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Comment</mat-label>
+        <textarea
+          matInput
+          formControlName="value"
+          id="lawEnforcementContactedComment"
+          rows="2"
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Location of Incident</mat-label>
+      <mat-select formControlName="locationId" id="locationId">
+        <mat-option
+          *ngFor="let location of locations$ | async"
+          [value]="location.id"
+        >
+          {{ location.value }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Choose the location where the incident occurred</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label class="required">Description of Behavior</mat-label>
+      <textarea
+        matInput
+        id="allegations"
+        rows="5"
+        formControlName="allegations"
+      ></textarea>
+      <mat-error>
+        <app-errors
+          [errors]="detailsGroup.get('allegations').errors"
+        ></app-errors>
+      </mat-error>
+    </mat-form-field>
+    <h3 class="full-width">Attachments</h3>
+    <div
+      *ngIf="detailsGroup.get('artifacts')?.value?.length"
+      formArrayName="artifacts"
+    >
+      <app-artifact-list
+        [artifacts]="artifacts.value"
+        (artifactRemoved)="removeArtifact($event.index, $event.artifactId)"
+      ></app-artifact-list>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Add Attachment</mat-label>
+      <app-file-input
+        #file
+        formControlName="fileBinary"
+        [multiple]="true"
+        (filesChanged)="addArtifacts($event)"
+      ></app-file-input>
+      <mat-icon
+        id="attachFile"
+        matSuffix
+        *ngIf="file.empty"
+        svgIcon="attach_file"
+      ></mat-icon>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="!file.empty"
+        (click)="file.clear($event)"
+      >
+        <mat-icon svgIcon="clear"></mat-icon>
+      </button>
+      <mat-hint>Any supporting documentation related to incident</mat-hint>
+    </mat-form-field>
+  </div>
+  <div fxLayout="column" fxFlex="calc(50% - 1em)">
+    <mat-form-field appearance="outline">
+      <mat-label>Safety Plan</mat-label>
+      <textarea
+        matInput
+        id="safetyPlan"
+        rows="5"
+        formControlName="safetyPlan"
+      ></textarea>
+    </mat-form-field>
+    <div
+      class="slide-toggle"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <span>Services Offered</span>
+      <div fxLayout="row" fxLayoutGap="2em" fxLayoutAlign="start center">
+        <mat-slide-toggle
+          #servicesOffered
+          formControlName="servicesOffered"
+          id="servicesOffered"
+        >
+        </mat-slide-toggle>
+        <span class="slide-toggle-response">{{
+          servicesOffered.checked ? 'Yes' : 'No'
+        }}</span>
+      </div>
+    </div>
+    <div
+      class="slide-toggle"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <span>Services Accepted</span>
+      <div fxLayout="row" fxLayoutGap="2em" fxLayoutAlign="start center">
+        <mat-slide-toggle
+          #servicesAccepted
+          formControlName="servicesAccepted"
+          id="servicesAccepted"
+        >
+        </mat-slide-toggle>
+        <span class="slide-toggle-response">{{
+          servicesAccepted.checked ? 'Yes' : 'No'
+        }}</span>
+      </div>
+    </div>
+    <h3 class="full-width">Receiving</h3>
+    <mat-form-field appearance="outline">
+      <mat-label>Received By</mat-label>
+      <mat-select formControlName="qaReviewedBy" id="qaReviewedBy">
+        <mat-option
+          *ngFor="let user of assignableUsers$ | async"
+          [value]="user.userName"
+        >
+          {{ user.displayName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Date Received</mat-label>
+      <input
+        matInput
+        [max]="maxDate"
+        [matDatepicker]="qaReviewDate"
+        placeholder="MM/DD/YYYY"
+        formControlName="qaReviewDate"
+        id="qaReviewDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        id="qaReviewDateToggle"
+        [for]="qaReviewDate"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #qaReviewDate></mat-datepicker>
+      <mat-hint>Enter the date this referral was received</mat-hint>
+      <mat-error>
+        <app-errors
+          [errors]="detailsGroup.get('qaReviewDate').errors"
+        ></app-errors>
+      </mat-error>
+    </mat-form-field>
+    <h3 class="full-width">Assignment</h3>
+    <mat-form-field appearance="outline">
+      <mat-label>Assigned To</mat-label>
+      <mat-select formControlName="assignedTo" id="assignedTo">
+        <mat-option
+          *ngFor="let user of assignableUsers$ | async"
+          [value]="user.userName"
+        >
+          {{ user.displayName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

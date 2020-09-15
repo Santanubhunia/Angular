@@ -1,0 +1,25 @@
+<table class="full-width" aria-describedby="List of adults">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Employment Status</th>
+      <th scope="col">Relationship To Child</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let adult of adults">
+      <td>{{ adult.firstName }} {{ adult.lastName }}</td>
+      <td>
+        {{ adult.employmentStatusId | lookup: 'employmentStatuses' | async }}
+      </td>
+      <td>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <span>{{ adult.adultTypeId | lookup: 'adultTypes' | async }}</span>
+          <button mat-icon-button type="button" (click)="removeAdult(adult.id)">
+            <fa-duotone-icon [icon]="faTrashAlt" size="lg"></fa-duotone-icon>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

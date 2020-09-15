@@ -1,0 +1,16 @@
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+fa-duotone-icon {
+  color: #355d88;
+}
+
+::ng-deep {
+  .information-tooltip {
+    background-color: #d3e0f0;
+    color: #000000 !important;
+    font-size: 12px;
+  }
+}

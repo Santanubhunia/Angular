@@ -1,0 +1,51 @@
+.edit {
+  padding-top: 4px;
+}
+
+.section {
+  width: 200px;
+  text-align: right;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.table {
+  display: table;
+  width: auto;
+}
+
+.table-row {
+  display: table-row;
+  width: auto;
+  line-height: normal;
+}
+
+.table-row .table-cell:first-child {
+  text-align: right;
+  color: #6b6b6b;
+  padding-right: 0.5em;
+  line-height: 1.5em;
+}
+
+.table-cell {
+  display: table-cell;
+  white-space: nowrap;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.user-info {
+  padding: 1.5em;
+  float: right;
+  background-color: #f0f0f0;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 14px;
+}
+
+.summary-header {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.value {
+  color: rgba(0, 0, 0, 0.87);
+}

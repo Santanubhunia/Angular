@@ -1,0 +1,15 @@
+:host {
+  box-sizing: border-box;
+  display: block;
+  height: calc(100% - 36px);
+}
+
+::ng-deep .mat-tab-body-wrapper {
+  height: 100%;
+  padding: 1em 1em 0 1em;
+}
+
+.case-details {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+}

@@ -1,0 +1,23 @@
+::ng-deep .case-notes-search {
+  .mat-form-field-infix {
+    padding: 0.5em;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+.case-notes-list {
+  overflow: auto;
+  padding-right: 1em;
+}
+
+.display-name {
+  font-weight: bold;
+  font-size: large;
+}

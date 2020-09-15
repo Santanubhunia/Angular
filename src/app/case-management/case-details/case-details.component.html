@@ -1,0 +1,202 @@
+<div class="full-height">
+  <mat-card>
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+      <mat-card-title>Case Details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content [formGroup]="caseDetailsForm">
+      <div
+        fxLayout="row"
+        fxLayout.lt-md="column"
+        fxLayoutGap="1em"
+        fxLayoutGap.lt-md="0"
+        class="full-width"
+      >
+        <div fxLayout="column" fxFlex="calc(50% - 1em)">
+          <div
+            class="slide-toggle"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
+            <span>Education Support Plan</span>
+            <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+              <mat-slide-toggle
+                #educationSupportPlan
+                formControlName="educationSupportPlan"
+                id="educationSupportPlan"
+              ></mat-slide-toggle>
+              <span class="slide-toggle-response">{{
+                educationSupportPlan.checked ? 'Yes' : 'No'
+              }}</span>
+            </div>
+          </div>
+          <div
+            class="slide-toggle"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
+            <span>Safety Plan</span>
+            <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+              <mat-slide-toggle
+                #safetyPlan
+                formControlName="safetyPlan"
+                id="safetyPlan"
+              ></mat-slide-toggle>
+              <span class="slide-toggle-response">{{
+                safetyPlan.checked ? 'Yes' : 'No'
+              }}</span>
+            </div>
+          </div>
+          <div
+            class="slide-toggle"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
+            <span>Prior FAP Involvment</span>
+            <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+              <mat-slide-toggle
+                #priorFAPInvolvement
+                formControlName="priorFAPInvolvement"
+                id="priorFAPInvolvement"
+              ></mat-slide-toggle>
+              <span class="slide-toggle-response">{{
+                priorFAPInvolvement.checked ? 'Yes' : 'No'
+              }}</span>
+            </div>
+          </div>
+          <div
+            class="slide-toggle"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
+            <span>Special Needs</span>
+            <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+              <mat-slide-toggle
+                #specialNeeds
+                formControlName="specialNeeds"
+                id="specialNeeds"
+              ></mat-slide-toggle>
+              <span class="slide-toggle-response">{{
+                specialNeeds.checked ? 'Yes' : 'No'
+              }}</span>
+            </div>
+          </div>
+          <div
+            class="slide-toggle"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
+            <span>Reasonable CAN/DA Suspicion</span>
+            <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+              <mat-slide-toggle
+                #reasonableCANDA
+                formControlName="reasonableCANDA"
+                id="reasonableCANDA"
+              ></mat-slide-toggle>
+              <span class="slide-toggle-response">{{
+                reasonableCANDA.checked ? 'Yes' : 'No'
+              }}</span>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column" fxFlex="calc(50% - 1em)">
+          <div fxLayout="row" fxLayoutAlign="space-between" class="full-width">
+            <div
+              class="slide-toggle"
+              fxLayout="row"
+              fxLayoutAlign="space-between center"
+            >
+              <span>FACAT Requested</span>
+              <div
+                fxLayout="row"
+                fxLayoutGap="1em"
+                fxLayoutAlign="start center"
+              >
+                <mat-slide-toggle
+                  #facatRequested
+                  id="facatRequested"
+                  (change)="handleDate($event)"
+                  [checked]="!!caseDetailsForm.get('facatRequested').value"
+                ></mat-slide-toggle>
+                <span class="slide-toggle-response">{{
+                  facatRequested.checked ? 'Yes' : 'No'
+                }}</span>
+              </div>
+            </div>
+            <div
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              *ngIf="caseDetailsForm.get('facatRequested').value"
+            >
+              {{ caseDetailsForm.get('facatRequested').value | date }}
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between" class="full-width">
+            <div
+              class="slide-toggle"
+              fxLayout="row"
+              fxLayoutAlign="space-between center"
+            >
+              <span>FACAT Approved</span>
+              <div
+                fxLayout="row"
+                fxLayoutGap="1em"
+                fxLayoutAlign="start center"
+              >
+                <mat-slide-toggle
+                  #facatApproved
+                  id="facatApproved"
+                  (change)="handleDate($event)"
+                  [checked]="!!caseDetailsForm.get('facatApproved').value"
+                ></mat-slide-toggle>
+                <span class="slide-toggle-response">{{
+                  facatApproved.checked ? 'Yes' : 'No'
+                }}</span>
+              </div>
+            </div>
+            <div
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              *ngIf="caseDetailsForm.get('facatApproved').value"
+            >
+              {{ caseDetailsForm.get('facatApproved').value | date }}
+            </div>
+          </div>
+          <div
+            class="slide-toggle"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
+            <span>Substance Abuse</span>
+            <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+              <mat-slide-toggle
+                #substanceUse
+                formControlName="substanceUse"
+                id="substanceUse"
+              ></mat-slide-toggle>
+              <span class="slide-toggle-response">{{
+                substanceUse.checked ? 'Yes' : 'No'
+              }}</span>
+            </div>
+          </div>
+          <div
+            class="slide-toggle"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+          >
+            <span>Co-Occuring CAN/DA Case</span>
+            <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+              <mat-slide-toggle
+                #cooccurringCANDA
+                formControlName="cooccurringCANDA"
+                id="cooccurringCANDA"
+              ></mat-slide-toggle>
+              <span class="slide-toggle-response">{{
+                cooccurringCANDA.checked ? 'Yes' : 'No'
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

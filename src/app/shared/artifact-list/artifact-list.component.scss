@@ -1,0 +1,35 @@
+fa-duotone-icon {
+  color: #355d88;
+  height: 24px;
+  width: 24px;
+}
+
+.delete {
+  width: 30px;
+}
+
+table {
+  border: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th {
+  white-space: nowrap;
+}
+
+.view th {
+  border-bottom: 2px solid #d4d4d4;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  padding-bottom: 0.5em;
+}
+
+thead::after {
+  content: '';
+  display: block;
+  height: 1em;
+  width: 100%;
+  background: transparent;
+}

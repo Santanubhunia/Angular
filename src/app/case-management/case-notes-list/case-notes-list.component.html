@@ -1,0 +1,57 @@
+<div fxFlexFill fxLayout="column" fxLayoutGap="1em">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <h2 mat-dialog-title>Case Notes</h2>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="1em">
+      <div class="case-notes-search">
+        <mat-form-field appearance="outline">
+          <input matInput id="search-box" />
+          <mat-icon svgIcon="search" matSuffix></mat-icon>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button>
+        Filter
+        <mat-icon svgIcon="filter" matSuffix></mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="case-notes-list"
+    fxLayout="column"
+    fxLayoutGap="1em"
+    *ngIf="caseNotes$ | async as caseNotes"
+  >
+    <div fxLayout="column" fxLayoutGap="1em" *ngFor="let note of caseNotes">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <span class="display-name">{{
+            note.createdBy | lookup: 'users' | async
+          }}</span>
+          wrote:
+        </div>
+        <div fxLayout="row" fxLayoutGap="1em">
+          <div>
+            {{ note.clinical ? 'CLINICAL' : 'NON-CLINICAL' }}
+          </div>
+          <div>
+            {{ note.createdDate | date }}
+          </div>
+        </div>
+      </div>
+      <div>
+        {{ note.value }}
+      </div>
+      <div>
+        <strong>Related To</strong>:
+        {{ note.commentTypeId | lookup: 'relatesTo' | async }}
+      </div>
+    </div>
+  </div>
+
+  <app-case-notes-editor
+    [caseId]="data.caseId"
+    (closeForm)="onCloseForm()"
+  ></app-case-notes-editor>
+</div>

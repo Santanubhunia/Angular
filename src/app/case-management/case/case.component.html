@@ -1,0 +1,97 @@
+<ng-container *ngIf="case$ | async as case">
+  <div fxLayout="column" fxLayoutGap="1em" fxFlexFill>
+    <mat-card>
+      <div fxLayout="row" class="full-width" class="case-details">
+        <div fxLayout="column" fxLayoutGap="0.5em" fxFlex="25">
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>{{ case.caseNumber }}</span>
+            <span>{{ case.child.firstName }} {{ case.child.lastName }}</span>
+          </div>
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>Involvement:</span>
+            <span>{{
+              (case.child?.childDetails)[0]?.childTypeId
+                | lookup: 'childTypes'
+                | async
+                | uppercase
+            }}</span>
+          </div>
+          <span>CAUTIONARY</span>
+        </div>
+        <div fxLayout="column" fxLayoutGap="0.5em" fxFlex="25">
+          <span>Assigned To</span>
+          <span>CCM: Olivia Arribas</span>
+          <span>NCCM: Carol Chimaki</span>
+        </div>
+        <div fxLayout="column" fxLayoutGap="0.5em" fxFlex="25">
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>Service:</span>
+            <span>ARMY</span>
+          </div>
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>Installation:</span>
+            <span>Fort Carson</span>
+          </div>
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>MDT Engaged:</span>
+            <span>01/24/2019</span>
+          </div>
+        </div>
+        <div fxLayout="column" fxLayoutGap="0.5em" fxFlex="25">
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>Status:</span>
+            <span>Closed</span>
+          </div>
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>Date:</span>
+            <span>{{ case.updatedDate | date: 'MM/dd/yyyy' }}</span>
+          </div>
+          <div fxLayout="row" fxLayoutGap="2em">
+            <span>Reason</span>
+            <span>Treatment Completed</span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    <div fxLayout="row" fxLayoutGap="1em" class="full-height">
+      <mat-tab-group fxFlex="calc(70% - 1em)">
+        <mat-tab label="Case Information">
+          <ng-template matTabContent>
+            <app-case-information [case]="case"></app-case-information>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="MDT">
+          <ng-template matTabContent>
+            <app-mdt [case]="case"></app-mdt>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Case Review">
+          <ng-template matTabContent>
+            <app-case-review></app-case-review>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Case Transfer">
+          <ng-template matTabContent>
+            <app-case-transfer></app-case-transfer>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Case Timeline">
+          <ng-template matTabContent>
+            <app-case-timeline></app-case-timeline>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+      <div fxLayout="column" fxLayoutGap="1em" fxFlex="calc(30% - 1em)">
+        <div fxFlex="calc(45% - 1em)">
+          <app-case-incidents></app-case-incidents>
+        </div>
+        <div fxFlex="calc((55% / 2) - 1em)">
+          <app-appointments></app-appointments>
+        </div>
+        <div fxFlex="calc((55% / 2) - 1em)">
+          <app-referrals></app-referrals>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

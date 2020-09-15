@@ -1,0 +1,61 @@
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" fxFlexFill>
+    <div fxFlex="100" fxFlex.lt-md="1 1 auto" fxLayout="column" fxLayoutGap="1em">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="full-width">
+            <h3>MDT</h3>
+            <h3>Date Referred To MDT : {{ dateReferredToMDT | date }}</h3>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="full-width">
+            <h3>Meetings</h3>
+            <button class="button" mat-raised-button color="accent">
+                <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="1em">
+                    <span>ADD Meeting</span>
+                </div>
+            </button>
+        </div>
+        <mat-table [dataSource]="datasource" class="mat-elevation-z8" matSort matSortDisableClear>
+            <ng-container matColumnDef="meetingDate">
+                <mat-header-cell *matHeaderCellDef>Meeting Date</mat-header-cell>
+                <mat-cell *matCellDef="let item">
+                    {{ item.meetingDate | date }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="participantName">
+                <mat-header-cell *matHeaderCellDef>Participant Name</mat-header-cell>
+                <mat-cell *matCellDef="let item">
+                    <div *ngFor="let participant of item.participants">
+                        <span>
+                            {{ participant.firstName }}  
+                        </span>
+                    </div>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="organization">
+                <mat-header-cell *matHeaderCellDef>Organization</mat-header-cell>
+                <mat-cell *matCellDef="let item">
+                    {{ item.organization }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="mdtNotes">
+                <mat-header-cell *matHeaderCellDef>Mdt Notes</mat-header-cell>
+                <mat-cell *matCellDef="let item">
+                    <span *ngFor="let data of item.notes">{{ data.note.value }}</span>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nextSteps">
+                <mat-header-cell *matHeaderCellDef>Next Steps</mat-header-cell>
+                <mat-cell *matCellDef="let item">
+                    {{ item.nextSteps }}
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns" 
+            class="mtd"
+            (click)="selectMtd(row)"></mat-row>
+        </mat-table>        
+    </div>
+</div>

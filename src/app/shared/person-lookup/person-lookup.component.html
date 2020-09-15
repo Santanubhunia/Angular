@@ -1,0 +1,36 @@
+<mat-form-field appearance="outline">
+  <mat-label
+    >{{
+      isChild ? 'Lookup Child' : 'Lookup Sponsor, Parent or Guardian'
+    }}&hellip;</mat-label
+  >
+  <input
+    matInput
+    id="search-box"
+    [formControl]="searchControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-hint *ngIf="isChild"
+    >Lookup child by phone number, SSN, DoD ID, or name</mat-hint
+  >
+  <mat-hint *ngIf="!isChild"
+    >Lookup or Enter the name of the sponsor, parent or guardian, by phone
+    number, SSN, DoD ID, or name</mat-hint
+  >
+  <mat-icon matSuffix svgIcon="search"></mat-icon>
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-option *ngIf="isLoading" class="is-loading">
+      <mat-spinner diameter="50"></mat-spinner>
+    </mat-option>
+    <ng-container *ngIf="!isLoading">
+      <mat-option *ngFor="let person of filteredPeople" [value]="person">
+        {{ person.firstName }} {{ person.lastName }} -
+        {{ person.ssn ? person.ssn : person.doDId }}
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+  <mat-error
+    >No
+    {{ isChild ? 'Children' : 'Sponsor, Parent or Guardian' }} found</mat-error
+  >
+</mat-form-field>

@@ -1,0 +1,77 @@
+<form [formGroup]="mtdForm" (ngSubmit)="submitMtdForm()" autocomplete="off">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title> MTD Meeting Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="full-width" fxLayout="column" fxLayoutGap.gt-sm="1em">
+                <div class="full-width" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="2em">
+                    <section fxFlex="70">
+                        <h3>Participants</h3>
+                        <ng-container *ngFor="let participant of mtd.participants">
+                            <ng-container>
+                                <div class="full-width" fxLayout="row" fxLayoutGap="1em">
+                                    <div fxFlex="calc(50% - 1em)">
+                                        <span>{{ participant.firstName }} {{ participant.lastName }}</span>
+                                    </div>
+                                    <div fxFlex="calc(50% - 1em)">
+                                        <span>{{ participant.genderId }}</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </section>
+                    <section fxFlex="30">
+                        <h3>Date of Meeting: {{ mtd.meetingDate | date }} </h3>
+                    </section>
+                </div>
+                <div class="full-width" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="2em">
+                    <section fxFlex="100">
+                        <h3>Meeting Notes</h3>
+                        <ng-container *ngFor="let item of mtd.notes">
+                            <ng-container>
+                                <div class="full-width" fxLayout="row" fxLayoutGap="1em">
+                                    <div fxFlex="calc(100% - 1em)">
+                                        <span>{{ item.note.value }}</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </section>
+                </div>
+                <div class="full-width" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="2em">
+                    <section fxFlex="100">
+                        <h3>FAP Next Steps</h3>
+                        <ng-container *ngFor="let item of mtd.notes">
+                            <ng-container>
+                                <div class="full-width" fxLayout="row" fxLayoutGap="1em">
+                                    <div fxFlex="calc(100% - 1em)">
+                                        <span>{{ item.note.value }}</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </section>
+                </div>
+                <div class="full-width" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="2em">
+                    <section fxFlex="100">
+                        <h3>CDP Next Steps</h3>
+                        <ng-container *ngFor="let item of mtd.notes">
+                            <ng-container>
+                                <div class="full-width" fxLayout="row" fxLayoutGap="1em">
+                                    <div fxFlex="calc(100% - 1em)">
+                                        <span>{{ item.note.value }}</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </section>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <span fxFlex="1 1 auto"></span>
+            <button mat-button mat-dialog-close>Close</button>
+          </mat-card-actions>
+    </mat-card>
+</form>

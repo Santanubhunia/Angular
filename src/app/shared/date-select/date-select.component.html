@@ -1,0 +1,37 @@
+<h2>{{ data.title }}</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label class="required">Select Date</mat-label>
+    <input
+      matInput
+      [max]="maxDate"
+      [matDatepicker]="selectDatePicker"
+      placeholder="MM/DD/YYYY"
+      required
+      [(ngModel)]="selectedDate"
+      #selectDate="ngModel"
+      id="selectDate"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      id="selectDateToggle"
+      [for]="selectDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #selectDatePicker></mat-datepicker>
+    <mat-error>
+      <app-errors [errors]="selectDate.errors"></app-errors>
+    </mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="button" mat-raised-button (click)="close()">Cancel</button>
+  <button
+    class="button"
+    mat-raised-button
+    color="accent"
+    (click)="saveDate()"
+    [disabled]="selectDate.invalid"
+  >
+    Submit
+  </button>
+</mat-dialog-actions>

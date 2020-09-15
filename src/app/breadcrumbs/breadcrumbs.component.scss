@@ -1,0 +1,22 @@
+:host {
+  width: 100%;
+}
+
+mat-icon,
+a {
+  color: rgba(0, 0, 0, 0.54) !important;
+  font-size: 1em;
+  padding-right: 1em;
+}
+
+.container {
+  height: 36px;
+}
+
+.breadcrumb {
+  padding-right: 1em;
+}
+
+.mat-button {
+  padding: 0;
+}

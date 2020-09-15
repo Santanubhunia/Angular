@@ -1,0 +1,29 @@
+:host {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+h2 {
+  margin-block-end: 1em;
+}
+
+span,
+mat-icon {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mat-dialog-content {
+  padding: 24px;
+}
+
+.is-loading {
+  margin: 1em;
+}
+
+.is-loading ::ng-deep .mat-option-text {
+  display: flex;
+  justify-content: center;
+}

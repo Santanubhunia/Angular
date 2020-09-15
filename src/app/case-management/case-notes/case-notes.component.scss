@@ -1,0 +1,25 @@
+mat-card {
+  height: calc(100% - 2em);
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-card-header {
+  flex-shrink: 0;
+}
+
+.mat-card-content {
+  flex-grow: 1;
+}
+
+.case-note {
+  font-size: small;
+}
+
+.case-details {
+  font-weight: 500;
+}
+
+.case-note-footer {
+  font-size: small;
+}

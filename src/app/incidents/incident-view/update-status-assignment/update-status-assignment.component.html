@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Update Status & Assignment</h2>
+<mat-dialog-content [formGroup]="updateForm">
+  <div fxLayout="column" fxLayoutGap="1em">
+    <div fxLayout="row" fxLayoutGap="1em">
+      <mat-form-field appearance="outline">
+        <mat-label class="required">Status</mat-label>
+        <mat-select formControlName="statusId" id="statusId">
+          <mat-option
+            *ngFor="let status of statuses$ | async"
+            [value]="status.id"
+          >
+            {{ status.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Assigned To</mat-label>
+        <mat-select formControlName="assignedTo" id="assignedTo">
+          <mat-option
+            *ngFor="let assignableUser of assignableUsers$ | async"
+            [value]="assignableUser.userName"
+          >
+            {{ assignableUser.displayName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div formArrayName="comments">
+      <div *ngFor="let comment of comments.controls; let i = index">
+        <div [formGroupName]="i">
+          <mat-form-field appearance="outline">
+            <mat-label>Comment</mat-label>
+            <textarea matInput formControlName="value" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="button" mat-raised-button mat-dialog-close>Cancel</button>
+  <button
+    class="button"
+    mat-raised-button
+    color="primary"
+    (click)="submit()"
+    [disabled]="updateForm.invalid"
+  >
+    Save
+  </button>
+</mat-dialog-actions>

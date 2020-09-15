@@ -1,0 +1,162 @@
+<div class="form-container" *ngIf="{ activeStep: activeStep$ | async } as data">
+  <div class="mat-typography steps full-width" fxLayout="row">
+    <ng-container *ngFor="let step of steps; let i = index">
+      <div
+        fxFlex="20%"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        [ngClass]="{
+          completed: step.completed && data.activeStep !== i,
+          active: data.activeStep === i,
+          disabled: !step.completed && i > data.activeStep
+        }"
+        (click)="stepClick(i, data.activeStep)"
+      >
+        <a
+          [attr.aria-label]="step.label"
+          [id]="step.id"
+          role="link"
+          tabindex="0"
+          >{{ step.label }}</a
+        >
+      </div>
+    </ng-container>
+  </div>
+  <mat-card>
+    <mat-card-header class="full-width">
+      <mat-card-title
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+        class="full-width"
+      >
+        <span class="title">{{ steps[data.activeStep]?.title }}</span>
+        <app-incident-status-badge
+          *ngIf="data.activeStep !== 0"
+          [riskId]="incidentForm.value?.riskId"
+        ></app-incident-status-badge>
+      </mat-card-title>
+      <mat-card-subtitle
+        fxLayout="row"
+        fxLayoutGap="2em"
+        fxLayoutAlign="space-between top"
+        *ngIf="steps[data.activeStep]?.subtitle"
+      >
+        <span>
+          {{ steps[data.activeStep]?.subtitle }}
+        </span>
+        <span
+          class="incident-number"
+          *ngIf="incident && data.activeStep !== 0 && data.activeStep !== 4"
+          >{{ incident.incidentNumber }}</span
+        >
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container [ngSwitch]="data.activeStep">
+        <div [@enterTrigger]="'fadeIn'" *ngSwitchCase="0">
+          <app-start-intake
+            [startIntakeGroup]="incidentForm"
+          ></app-start-intake>
+        </div>
+        <div [@enterTrigger]="'fadeIn'" *ngSwitchCase="1">
+          <app-involved-children
+            [incidentId]="incident?.id"
+            [involvedChildrenGroup]="incidentForm"
+            [showEducationSupportPlan]="incidentForm.get('riskId').value !== 1"
+          ></app-involved-children>
+        </div>
+        <div [@enterTrigger]="'fadeIn'" *ngSwitchCase="2">
+          <ng-container
+            *ngIf="incidentForm.get('riskId').value === 1; else details"
+          >
+            <app-details-basic
+              [incidentId]="incident?.id"
+              [detailsGroup]="incidentForm"
+            ></app-details-basic>
+          </ng-container>
+          <ng-template #details>
+            <app-details
+              [incidentId]="incident?.id"
+              [detailsGroup]="incidentForm"
+            ></app-details>
+          </ng-template>
+        </div>
+        <div [@enterTrigger]="'fadeIn'" *ngSwitchCase="3">
+          <app-referrals [referralsGroup]="incidentForm"></app-referrals>
+        </div>
+        <div [@enterTrigger]="'fadeIn'" *ngSwitchCase="4">
+          <app-summary
+            [incident]="incident"
+            [incidentForm]="incidentForm.value"
+          ></app-summary>
+        </div>
+      </ng-container>
+    </mat-card-content>
+    <mat-card-actions>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="1em">
+          <button
+            *ngIf="data.activeStep !== 0"
+            class="button"
+            mat-raised-button
+            type="button"
+            (click)="previousStep()"
+          >
+            Previous
+          </button>
+          <span>
+            * Required Fields
+          </span>
+        </div>
+        <div fxLayout="row" fxLayoutGap="1em">
+          <ng-container *ngIf="data.activeStep === 0; else draft">
+            <button
+              class="button"
+              mat-raised-button
+              (click)="cancel()"
+              type="button"
+            >
+              Cancel
+            </button>
+          </ng-container>
+          <ng-template #draft>
+            <button
+              class="button"
+              mat-raised-button
+              color="accent"
+              (click)="saveAsDraft()"
+              type="button"
+              [disabled]="saveAsDraftDisabled"
+            >
+              {{ isEdit ? 'Save' : 'Save as Draft' }}
+            </button>
+          </ng-template>
+          <ng-container *ngIf="data.activeStep !== 4; else submitIncident">
+            <button
+              class="button"
+              mat-raised-button
+              color="accent"
+              (click)="nextStep()"
+              type="button"
+              [disabled]="!steps[data.activeStep].completed"
+            >
+              Continue
+            </button>
+          </ng-container>
+          <ng-template #submitIncident>
+            <button
+              class="button"
+              mat-raised-button
+              color="accent"
+              (click)="submit()"
+              type="button"
+              [disabled]="incidentForm.invalid"
+            >
+              Submit
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,0 +1,10 @@
+<ng-container *ngIf="loading$ | async">
+  <app-loader></app-loader>
+</ng-container>
+<ng-container *ngIf="(loading$ | async) !== true">
+  <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+    <button class="button" mat-raised-button color="accent" (click)="initLogin()">
+      Login
+    </button>
+  </div>
+</ng-container>

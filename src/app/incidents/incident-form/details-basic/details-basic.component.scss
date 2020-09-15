@@ -1,0 +1,20 @@
+h3 {
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 500;
+  font-size: 1em;
+  padding-bottom: 0.5em;
+  margin-bottom: 0;
+}
+
+.full-width {
+  max-width: none;
+}
+
+.slide-toggle {
+  max-width: 300px;
+}
+
+.attachments,
+h3 {
+  max-width: 600px !important;
+}

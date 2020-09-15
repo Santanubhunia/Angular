@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Add Referred To Organization</h2>
+<mat-dialog-content [formGroup]="referralToForm">
+  <div fxLayout="column" fxLayoutGap="1em">
+    <div fxLayout="row" fxLayoutGap="1em">
+      <mat-form-field appearance="outline" fxFlex="calc(50% - 1em)">
+        <mat-label class="required">Organization</mat-label>
+        <mat-select
+          formControlName="referralOrganizationId"
+          id="referralOrganizationIdIn"
+        >
+          <mat-option
+            *ngFor="let referralOrganization of referralOrganizations$ | async"
+            [value]="referralOrganization.id"
+          >
+            {{ referralOrganization.value }}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Choose the organization</mat-hint>
+        <mat-error
+          ><app-errors
+            [errors]="referralToForm.get('referralOrganizationId').errors"
+          ></app-errors>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50">
+        <mat-label>Point of Contact</mat-label>
+        <input matInput id="referralPOC" formControlName="referralPOC" />
+        <mat-hint>Enter the name of the point of contact</mat-hint>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Comments</mat-label>
+      <textarea matInput formControlName="referralComments" rows="3"></textarea>
+    </mat-form-field>
+    <div fxLayout="row">
+      <mat-form-field appearance="outline" fxFlex="50">
+        <mat-label class="required">Date</mat-label>
+        <input
+          matInput
+          id="referralDateIn"
+          [max]="maxDate"
+          [matDatepicker]="referralDateIn"
+          placeholder="MM/DD/YYYY"
+          formControlName="referralDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          id="referralDateInToggle"
+          [for]="referralDateIn"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #referralDateIn></mat-datepicker>
+        <mat-hint>Enter the date</mat-hint>
+        <mat-error>
+          <app-errors
+            [errors]="referralToForm.get('referralDate').errors"
+          ></app-errors>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="button" mat-raised-button mat-dialog-close>Cancel</button>
+  <button
+    class="button"
+    mat-raised-button
+    color="primary"
+    (click)="submit()"
+    [disabled]="referralToForm.invalid"
+  >
+    Save
+  </button>
+</mat-dialog-actions>

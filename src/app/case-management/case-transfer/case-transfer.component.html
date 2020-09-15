@@ -1,0 +1,105 @@
+<mat-card fxLayout="column" fxFlexFill *ngIf="!transferInitiated">
+  <mat-card-header>
+    <mat-card-title>Case Transfer</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxFlex="auto">
+    <p
+      >This feature allows a user to transfer a case to another
+      Installation/Service. You can cancel the transfer on the next page, but
+      once the case is transferred it cannot be reverted, so please use this
+      feature cautiously. It will automatically remove the assigned case
+      managers and associate the case with the new Installation/Service.</p
+    >
+  </mat-card-content>
+  <mat-card-actions align="end"
+    ><button
+      mat-raised-button
+      color="accent"
+      class="button"
+      (click)="transferInitiated = true"
+      >Initiate Transfer</button
+    ></mat-card-actions
+  >
+</mat-card>
+<mat-card fxLayout="column" fxFlexFill *ngIf="transferInitiated">
+  <mat-card-header>
+    <mat-card-title>Case Transfer</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxFlex="auto" [formGroup]="caseTransferForm">
+    <div class="full-width" fxLayout="row">
+      <mat-form-field fxFlex="50" fxFlex.lt-md="auto" appearance="outline">
+        <mat-label class="required">Service</mat-label>
+        <mat-select formControlName="militaryBranchId" id="militaryBranchId">
+          <mat-option
+            *ngFor="let militaryBranch of militaryBranches$ | async"
+            [value]="militaryBranch.id"
+            >{{ militaryBranch.value }}</mat-option
+          >
+        </mat-select>
+        <mat-error>
+          <app-errors
+            [errors]="caseTransferForm.get('militaryBranchId').errors"
+          ></app-errors>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="full-width" fxLayout="row">
+      <mat-form-field fxFlex="50" fxFlex.lt-md="auto" appearance="outline">
+        <mat-label class="required">Installation</mat-label>
+        <mat-select formControlName="installationId" id="installationId">
+          <mat-option
+            *ngFor="let installation of installations$ | async"
+            [value]="installation.id"
+            >{{ installation.value }}</mat-option
+          >
+        </mat-select>
+        <mat-error>
+          <app-errors
+            [errors]="caseTransferForm.get('installationId').errors"
+          ></app-errors>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="full-width" fxLayout="row">
+      <mat-form-field fxFlex="50" fxFlex.lt-md="auto" appearance="outline">
+        <mat-label class="required">Effective Date</mat-label>
+        <input
+          matInput
+          formControlName="effectiveDate"
+          id="effectiveDate"
+          [matDatepicker]="effectiveDate"
+          [max]="maxDate"
+          placeholder="MM/DD/YYYY"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          id="effectiveDateToggle"
+          [for]="effectiveDate"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #effectiveDate></mat-datepicker>
+        <mat-error>
+          <app-errors
+            [errors]="caseTransferForm.get('effectiveDate').errors"
+          ></app-errors>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="full-width" fxLayout="row">
+      <mat-form-field fxFlex appearance="outline">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="notes" rows="3"></textarea>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button
+      mat-stroked-button
+      class="button stroked-button"
+      (click)="transferInitiated = false"
+      >Cancel</button
+    >
+    <button mat-raised-button color="accent" class="button">
+      Transfer
+    </button>
+  </mat-card-actions>
+</mat-card>

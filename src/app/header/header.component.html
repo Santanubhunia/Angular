@@ -1,0 +1,86 @@
+<ng-container
+  *ngIf="{
+    userInfo: userInfo$ | async,
+    isLoggedIn: isLoggedIn$ | async
+  } as data"
+>
+  <span class="mat-typography">
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+      <button
+        mat-icon-button
+        (click)="toggle.emit()"
+        aria-label="menu"
+        *ngIf="data.isLoggedIn"
+      >
+        <mat-icon svgIcon="menu"></mat-icon>
+      </button>
+      <h1 fxFlex="1 1 auto" [ngClass]="{ 'text-center': !data.isLoggedIn }">
+        Menu
+      </h1>
+      <ng-container *ngIf="data.isLoggedIn">
+        <div
+          *ngIf="data.userInfo as userInfo"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="1em"
+        >
+          <mat-form-field
+            appearance="outline"
+            floatLabel="never"
+            class="header-form-field"
+            fxShow="true"
+            fxHide.lt-md="true"
+            fxLayout="row"
+          >
+            <mat-icon svgIcon="search" matPrefix></mat-icon>
+            <input
+              aria-label="Quick Search"
+              matInput
+              placeholder="Quick Search"
+              fxFlex="1 1 auto"
+              autocomplete="off"
+            />
+            <mat-select
+              disableOptionCentering
+              panelClass="header-select"
+              multiple
+              [aria-label]="'Search List'"
+            >
+              <mat-option
+                *ngFor="let searchType of searchTypesList"
+                [value]="searchType.value"
+                >{{ searchType.text }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button aria-label="Help">
+            <mat-icon svgIcon="help"></mat-icon>
+          </button>
+          <button mat-icon-button aria-label="Alerts">
+            <mat-icon
+              matBadge="2"
+              matBadgeColor="accent"
+              matBadgeSize="small"
+              svgIcon="notifications"
+            ></mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="profileMenu"
+            aria-label="User options"
+          >
+            <mat-icon svgIcon="person"></mat-icon>
+          </button>
+          <mat-menu #profileMenu="matMenu" class="mat-typography">
+            <div fxLayout="column" class="profile-menu">
+              <h3 class="text-center">{{ userInfo.name }}</h3>
+              <div class="text-right">
+                <button mat-flat-button (click)="logout()">Logout</button>
+              </div>
+            </div>
+          </mat-menu>
+        </div>
+      </ng-container>
+    </div>
+  </span>
+</ng-container>

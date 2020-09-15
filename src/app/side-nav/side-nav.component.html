@@ -1,0 +1,97 @@
+<ng-container
+  *ngIf="{
+    userInfo: userInfo$ | async,
+    isLoggedIn: isLoggedIn$ | async
+  } as data"
+>
+  <mat-sidenav-container
+    [ngClass]="{
+      'container-logged-in': data.isLoggedIn,
+      'container-not-logged-in': !data.isLoggedIn
+    }"
+    [hasBackdrop]="mode === 'over'"
+  >
+    <mat-sidenav
+      #snav
+      [mode]="mode"
+      class="mat-elevation-z6 sidenav"
+      [opened]="data.isLoggedIn"
+    >
+      <div fxFlexFill fxLayout="column">
+        <div
+          *ngIf="data.userInfo"
+          class="user-info"
+          fxLayout="column"
+          fxLayoutGap=".5em"
+        >
+          <span>{{ data.userInfo.name }}</span>
+          <span>{{ data.userInfo.role }}</span>
+        </div>
+        <mat-nav-list>
+          <ng-container *ngFor="let nav of navigationList">
+            <a
+              mat-list-item
+              [routerLink]="nav.path"
+              routerLinkActive="active"
+              *appRole="{ roles: nav.roles }"
+              class="nav-item"
+            >
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxLayoutGap="1em"
+              >
+                <fa-duotone-icon
+                  [icon]="nav.icon"
+                  size="lg"
+                  [attr.aria-label]="nav.name"
+                ></fa-duotone-icon>
+                <span>{{ nav.name }}</span>
+              </div>
+            </a>
+          </ng-container>
+        </mat-nav-list>
+        <span fxFlex="auto"></span>
+        <div
+          fxLayout="column"
+          *appRole="{ roles: allQuickActionRoles }"
+          class="quick-actions"
+        >
+          <section class="mat-typography">
+            <h3>Quick Actions</h3>
+            <hr />
+          </section>
+          <mat-nav-list>
+            <ng-container *ngFor="let quickAction of quickActionList">
+              <a
+                mat-list-item
+                class="nav-item"
+                *appRole="{ roles: quickAction.roles }"
+                (click)="quickAction.click()"
+              >
+                <div
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxLayoutGap="1em"
+                >
+                  <fa-duotone-icon
+                    [icon]="quickAction.icon"
+                    size="lg"
+                    [attr.aria-label]="quickAction.name"
+                  ></fa-duotone-icon>
+                  <span>{{ quickAction.name }}</span>
+                </div>
+              </a>
+            </ng-container>
+          </mat-nav-list>
+        </div>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <app-breadcrumbs></app-breadcrumbs>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <app-page-loader *ngIf="data.isLoggedIn"></app-page-loader>
+</ng-container>

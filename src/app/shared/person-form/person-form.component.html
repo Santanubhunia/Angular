@@ -1,0 +1,628 @@
+<form [formGroup]="personForm" autocomplete="off" (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ person ? 'Edit' : 'Add New' }} {{ isChild ? 'Child' : 'Person' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="full-width" fxLayout="column" fxLayoutGap.gt-sm="1em">
+        <div
+          class="full-width"
+          fxLayout="row"
+          fxLayout.lt-md="column"
+          fxLayoutGap.gt-sm="2em"
+        >
+          <section fxFlex="60">
+            <h3>Name</h3>
+            <div class="full-width" fxLayout="column">
+              <div class="full-width" fxLayout="row" *ngIf="!isChild">
+                <mat-form-field
+                  fxFlex="0 0 calc(50% - 0.5em)"
+                  fxFlex.lt-md="auto"
+                  appearance="outline"
+                >
+                  <mat-label>Prefix</mat-label>
+                  <mat-select formControlName="prefix" id="prefix">
+                    <mat-option
+                      *ngFor="let prefix of prefixes$ | async"
+                      [value]="prefix.value"
+                    >
+                      {{ prefix.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div
+                fxLayout="row"
+                fxLayout.lt-md="column"
+                fxLayoutGap.gt-sm="1em"
+              >
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label class="required">First Name</mat-label>
+                  <input matInput formControlName="firstName" id="firstName" />
+                  <mat-error>
+                    <app-errors
+                      [errors]="personForm.get('firstName').errors"
+                    ></app-errors>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label>Middle Name</mat-label>
+                  <input
+                    matInput
+                    formControlName="middleName"
+                    id="middleName"
+                  />
+                </mat-form-field>
+              </div>
+              <div
+                fxLayout="row"
+                fxLayout.lt-md="column"
+                fxLayoutGap.gt-sm="1em"
+              >
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label class="required">Last Name</mat-label>
+                  <input matInput formControlName="lastName" id="lastName" />
+                  <mat-error>
+                    <app-errors
+                      [errors]="personForm.get('lastName').errors"
+                    ></app-errors>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label>Suffix</mat-label>
+                  <mat-select formControlName="suffix" id="suffix">
+                    <mat-option
+                      *ngFor="let suffix of suffixes$ | async"
+                      [value]="suffix.value"
+                      >{{ suffix.value }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </section>
+          <section fxFlex="40">
+            <h3>Demographics</h3>
+            <div class="full-width" fxLayout="column">
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label class="required">Date of Birth</mat-label>
+                <input
+                  matInput
+                  formControlName="dateOfBirth"
+                  id="dateOfBirth"
+                  [matDatepicker]="dateOfBirth"
+                  [max]="maxDate"
+                  placeholder="MM/DD/YYYY"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  id="dateOfBirthToggle"
+                  [for]="dateOfBirth"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #dateOfBirth></mat-datepicker>
+                <mat-error>
+                  <app-errors
+                    [errors]="personForm.get('dateOfBirth').errors"
+                  ></app-errors>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label class="required">Sex</mat-label>
+                <mat-select formControlName="genderId" id="genderId">
+                  <mat-option
+                    *ngFor="let gender of genders$ | async"
+                    [value]="gender.id"
+                  >
+                    {{ gender.value }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-errors
+                    [errors]="personForm.get('genderId').errors"
+                  ></app-errors>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                fxFlex="0 0 calc(((25% / 2) + 25%) - 0.5em)"
+                *ngIf="!isChild"
+              >
+                <mat-label class="required">Relation to Child</mat-label>
+                <mat-select formControlName="adultTypeId" id="adultTypeId">
+                  <mat-option
+                    *ngFor="let adultType of adultTypes$ | async"
+                    [value]="adultType.id"
+                  >
+                    {{ adultType.value }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>
+                  <app-errors
+                    [errors]="personForm.get('adultTypeId').errors"
+                  ></app-errors>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </section>
+        </div>
+        <div
+          class="full-width"
+          fxLayout="row"
+          fxLayout.lt-md="column"
+          fxLayoutGap.gt-sm="2em"
+        >
+          <section fxFlex="60">
+            <ng-container formArrayName="addresses">
+              <h3>Address Information</h3>
+              <div class="full-width" fxLayout="column" *ngIf="!isChild">
+                <div class="full-width" fxLayout="row">
+                  <mat-checkbox
+                    color="primary"
+                    id="sameAddress"
+                    [formControl]="sameAddress"
+                    (change)="onAddressChange($event)"
+                    >Same as Child's Address</mat-checkbox
+                  >
+                </div>
+              </div>
+              <ng-container
+                *ngFor="let address of addresses.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="full-width" fxLayout="row">
+                    <mat-form-field fxFlex appearance="outline">
+                      <mat-label>Street</mat-label>
+                      <input matInput formControlName="street" id="street" />
+                    </mat-form-field>
+                  </div>
+                  <div class="full-width" fxLayout="row" fxLayoutGap="1em">
+                    <mat-form-field
+                      fxFlex="calc(50% - 1em)"
+                      appearance="outline"
+                    >
+                      <mat-label>City</mat-label>
+                      <input matInput formControlName="city" id="city" />
+                    </mat-form-field>
+                    <mat-form-field
+                      fxFlex="calc(25% - 1em)"
+                      appearance="outline"
+                    >
+                      <mat-label>State</mat-label>
+                      <mat-select formControlName="stateId" id="stateId">
+                        <mat-option [value]="null"></mat-option>
+                        <mat-option
+                          *ngFor="let state of states$ | async"
+                          [value]="state.id"
+                        >
+                          {{ state.value }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field
+                      fxFlex="calc(25% - 1em)"
+                      appearance="outline"
+                    >
+                      <mat-label>Zip</mat-label>
+                      <input matInput formControlName="zipCode" id="zipCode" />
+                    </mat-form-field>
+                  </div>
+                  <div class="full-width" fxLayout="row">
+                    <mat-form-field
+                      fxFlex="0 0 calc(50% - 0.5em)"
+                      fxFlex.lt-md="auto"
+                      appearance="outline"
+                    >
+                      <mat-label>Country</mat-label>
+                      <input matInput formControlName="country" id="country" />
+                    </mat-form-field>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </section>
+          <section fxFlex="40">
+            <h3>Identification</h3>
+            <div class="full-width" fxLayout="column">
+              <div
+                class="full-width"
+                [fxFlexOrder]="isChild ? 1 : 3"
+                *ngIf="isChild || (!isChild && alternateId.checked)"
+                formArrayName="protectedInformation"
+              >
+                <ng-container>
+                  <ng-container
+                    *ngFor="
+                      let pi of protectedInformation.controls;
+                      let i = index
+                    "
+                  >
+                    <mat-form-field
+                      fxFlex
+                      appearance="outline"
+                      [formGroupName]="i"
+                    >
+                      <mat-label
+                        [ngClass]="{
+                          required:
+                            (isChild && !alternateId.checked) ||
+                            (!isChild && alternateId.checked)
+                        }"
+                        >SSN</mat-label
+                      >
+                      <input
+                        matInput
+                        formControlName="value"
+                        appSsn
+                        placeholder="123-45-6789"
+                        maxlength="11"
+                        id="ssn"
+                      />
+                      <mat-error>
+                        <app-errors
+                          [errors]="pi.get('value').errors"
+                          [customErrors]="customErrors"
+                        ></app-errors>
+                      </mat-error>
+                    </mat-form-field>
+                  </ng-container>
+                </ng-container>
+              </div>
+              <div
+                *ngIf="isChild"
+                class="slide-toggle"
+                fxLayout="row"
+                fxLayoutAlign="space-between center"
+                fxFlexOrder="2"
+              >
+                <span>Beneficiary</span>
+                <div
+                  fxLayout="row"
+                  fxLayoutGap="2em"
+                  fxLayoutAlign="start center"
+                >
+                  <mat-slide-toggle
+                    #beneficiary
+                    id="beneficiary"
+                    formControlName="beneficiary"
+                  >
+                  </mat-slide-toggle>
+                  <span class="slide-toggle-response">{{
+                    beneficiary.checked ? 'Yes' : 'No'
+                  }}</span>
+                </div>
+              </div>
+              <div
+                class="slide-toggle"
+                fxLayout="row"
+                fxLayoutAlign="space-between center"
+                [fxFlexOrder]="isChild ? 3 : 2"
+              >
+                <span>Alternate ID</span>
+                <div
+                  fxLayout="row"
+                  fxLayoutGap="2em"
+                  fxLayoutAlign="start center"
+                >
+                  <mat-slide-toggle
+                    #alternateId
+                    id="alternateId"
+                    [formControl]="alternateIdControl"
+                    (change)="onAlternateIdChecked($event)"
+                  >
+                  </mat-slide-toggle>
+                  <span class="slide-toggle-response">{{
+                    alternateId.checked ? 'On' : 'Off'
+                  }}</span>
+                </div>
+              </div>
+              <div
+                class="full-width"
+                [fxFlexOrder]="isChild ? 4 : 1"
+                *ngIf="!isChild || (isChild && alternateId.checked)"
+              >
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label
+                    [ngClass]="{
+                      required:
+                        (!isChild && !alternateId.checked) ||
+                        (isChild && alternateId.checked)
+                    }"
+                    >DOD-ID</mat-label
+                  >
+                  <input matInput formControlName="doDId" id="doDId" />
+                  <mat-error>
+                    <app-errors
+                      [errors]="personForm.get('doDId').errors"
+                    ></app-errors>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div
+          class="full-width"
+          fxLayout="row"
+          fxLayout.lt-md="column"
+          fxLayoutGap.gt-sm="2em"
+        >
+          <section fxFlex="60">
+            <h3>Contact Information</h3>
+            <div *ngIf="isChild" class="full-width" fxLayout="column">
+              <div
+                class="full-width"
+                fxLayout="row"
+                formGroupName="contactPhoneNumber"
+              >
+                <mat-form-field
+                  [fxFlex]="
+                    isChild ? '0 0 calc(50% - 1.5em)' : '0 0 calc(50% - 0.5em)'
+                  "
+                  fxFlex.lt-md="auto"
+                  appearance="outline"
+                >
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="number" id="phoneNumber" />
+                </mat-form-field>
+              </div>
+              <div
+                class="full-width"
+                fxLayout="row"
+                formGroupName="contactEmailAddress"
+              >
+                <mat-form-field
+                  [fxFlex]="
+                    isChild ? '0 0 calc(50% - 1.5em)' : '0 0 calc(50% - 0.5em)'
+                  "
+                  fxFlex.lt-md="auto"
+                  appearance="outline"
+                >
+                  <mat-label>Email Address</mat-label>
+                  <input matInput formControlName="address" id="address" />
+                  <mat-error>
+                    <app-errors
+                      [errors]="
+                        personForm.get('contactEmailAddress').get('address')
+                          .errors
+                      "
+                      [customErrors]="customErrors"
+                    ></app-errors>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div *ngIf="!isChild" class="full-width" fxLayout="column">
+              <div
+                class="full-width"
+                fxLayout="row"
+                formArrayName="phoneNumbers"
+              >
+                <ng-container
+                  *ngFor="
+                    let phoneNumber of phoneNumbers.controls;
+                    let i = index
+                  "
+                >
+                  <ng-container [formGroupName]="i">
+                    <mat-form-field
+                      fxFlex="0 0 calc(50% - 0.5em)"
+                      fxFlex.lt-md="auto"
+                      appearance="outline"
+                    >
+                      <mat-label>Phone Number</mat-label>
+                      <input
+                        matInput
+                        formControlName="number"
+                        [id]="'phoneNumber-' + i"
+                      />
+                    </mat-form-field>
+                  </ng-container>
+                </ng-container>
+              </div>
+              <div
+                class="full-width"
+                fxLayout="row"
+                formArrayName="emailAddresses"
+              >
+                <ng-container
+                  *ngFor="
+                    let emailAddress of emailAddresses.controls;
+                    let i = index
+                  "
+                >
+                  <ng-container [formGroupName]="i">
+                    <mat-form-field
+                      fxFlex="0 0 calc(50% - 0.5em)"
+                      fxFlex.lt-md="auto"
+                      appearance="outline"
+                    >
+                      <mat-label>Email Address</mat-label>
+                      <input
+                        matInput
+                        formControlName="address"
+                        [id]="'emailAddress-' + i"
+                      />
+                    </mat-form-field>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+            <h3 *ngIf="!isChild">Location</h3>
+            <div *ngIf="!isChild" class="full-width" fxLayout="column">
+              <div class="full-width" fxLayout="row">
+                <mat-form-field
+                  fxFlex="0 0 calc(50% - 0.5em)"
+                  fxFlex.lt-md="auto"
+                  appearance="outline"
+                >
+                  <mat-label class="required">Service</mat-label>
+                  <mat-select
+                    formControlName="militaryBranchId"
+                    id="militaryBranchId"
+                  >
+                    <mat-option
+                      *ngFor="let militaryBranch of militaryBranches$ | async"
+                      [value]="militaryBranch.id"
+                      >{{ militaryBranch.value }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="full-width" fxLayout="row">
+                <mat-form-field
+                  fxFlex="0 0 calc(50% - 0.5em)"
+                  fxFlex.lt-md="auto"
+                  appearance="outline"
+                >
+                  <mat-label class="required">Installation</mat-label>
+                  <mat-select
+                    formControlName="installationId"
+                    id="installationId"
+                  >
+                    <mat-option
+                      *ngFor="let installation of installations$ | async"
+                      [value]="installation.id"
+                      >{{ installation.value }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </section>
+          <section fxFlex="40">
+            <div
+              class="full-width"
+              *ngIf="isChild"
+              fxLayout="column"
+              fxLayoutGap="1em"
+            >
+              <h3 class="required">Related Persons</h3>
+              <div class="full-width" fxLayout="column">
+                <div class="full-width" fxLayout="row">
+                  <app-person-lookup
+                    [isChild]="false"
+                    (personSelected)="onPersonSelected($event)"
+                  ></app-person-lookup>
+                </div>
+              </div>
+              <ng-container *ngIf="adults$ | async as adults">
+                <app-adult-list
+                  *ngIf="adults.length"
+                  [adults]="adults"
+                ></app-adult-list>
+              </ng-container>
+              <button
+                mat-raised-button
+                class="button"
+                type="button"
+                (click)="addPerson()"
+              >
+                Add New Person
+              </button>
+            </div>
+            <ng-container *ngIf="!isChild">
+              <h3>Employment Status</h3>
+              <div class="full-width" fxLayout="column">
+                <div class="full-width" fxLayout="row">
+                  <mat-form-field fxFlex appearance="outline">
+                    <mat-label class="required">Employment Status</mat-label>
+                    <mat-select
+                      formControlName="employmentStatusId"
+                      id="employmentStatusId"
+                    >
+                      <mat-option
+                        *ngFor="
+                          let employmentStatus of employmentStatuses$ | async
+                        "
+                        [value]="employmentStatus.id"
+                        >{{ employmentStatus.value }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <ng-container
+                *ngIf="personForm.get('employmentStatusId').value === 1"
+              >
+                <h3>Uniform Service Member Information</h3>
+                <div class="full-width" fxLayout="column">
+                  <div class="full-width" fxLayout="row">
+                    <mat-form-field fxFlex appearance="outline">
+                      <mat-label class="required">Command</mat-label>
+                      <mat-select formControlName="commandId" id="commandId">
+                        <mat-option
+                          *ngFor="let command of commands$ | async"
+                          [value]="command.id"
+                          >{{ command.value }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="full-width" fxLayout="row">
+                    <mat-form-field fxFlex appearance="outline">
+                      <mat-label class="required">Rank</mat-label>
+                      <mat-select formControlName="rankId" id="rankId">
+                        <mat-option
+                          *ngFor="let rank of ranks$ | async"
+                          [value]="rank.id"
+                          >{{ rank.value }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="full-width" fxLayout="row">
+                    <mat-form-field fxFlex appearance="outline">
+                      <mat-label class="required">Pay Grade</mat-label>
+                      <mat-select formControlName="payGradeId" id="payGradeId">
+                        <mat-option
+                          *ngFor="let payGrade of payGrades$ | async"
+                          [value]="payGrade.id"
+                          >{{ payGrade.value }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="full-width" fxLayout="row">
+                    <mat-form-field fxFlex appearance="outline">
+                      <mat-label class="required">Unit</mat-label>
+                      <input matInput formControlName="unit" id="unit" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </section>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="actions">
+        <span>
+          * Required Fields
+        </span>
+        <div fxLayout="row">
+          <button
+            class="button"
+            mat-raised-button
+            type="button"
+            (click)="goBack()"
+          >
+            Cancel
+          </button>
+          <button
+            class="button"
+            mat-raised-button
+            color="accent"
+            [disabled]="
+              personForm.invalid || (isChild && !(adults$ | async)?.length)
+            "
+          >
+            {{ person ? 'Save' : 'Add' }} {{ isChild ? 'Child' : 'Person' }}
+          </button>
+        </div>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</form>

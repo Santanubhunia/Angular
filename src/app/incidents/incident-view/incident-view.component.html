@@ -1,0 +1,353 @@
+<div
+  fxLayout="column"
+  fxLayoutGap="1em"
+  *ngIf="incident$ | async as incident"
+  style="margin-bottom: 24px;"
+>
+  <div fxLayout="row" fxLayoutAlign="end">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      class="edit-incident"
+      [matMenuTriggerFor]="menu"
+    >
+      <fa-duotone-icon
+        class="menu"
+        [icon]="faEllipsisH"
+        size="lg"
+      ></fa-duotone-icon>
+    </div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="editIncident(incident.id)">
+        Edit Incident
+      </button>
+      <button mat-menu-item (click)="updateStatusAndAssignment(incident)">
+        Update Status & Assignment
+      </button>
+    </mat-menu>
+  </div>
+  <mat-card
+    class="header"
+    [ngClass]="{
+      normative: incident.riskId === 1,
+      cautionary: incident.riskId === 2,
+      problematic: incident.riskId === 3
+    }"
+  >
+    <mat-card-content
+      fxFlexFill
+      fxLayout="row"
+      fxLayout.lt-md="column"
+      fxLayoutGap.lt-md="1em"
+      fxLayoutAlign="space-between center"
+      fxLayoutAlign.lt-md="start start"
+    >
+      <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="center center">
+        <fa-duotone-icon [icon]="faFileExclamation"></fa-duotone-icon>
+        <div fxLayout="column">
+          <span class="field">Incident ID:</span>
+          <span class="incident-id">{{ incident.incidentNumber }}</span>
+        </div>
+      </div>
+      <div class="table">
+        <div class="table-row">
+          <div class="table-cell field">
+            Assigned to:
+          </div>
+          <div class="table-cell">
+            {{
+              !incident.assignedTo
+                ? 'Unassigned'
+                : (incident.assignedTo | lookup: 'users' | async)
+            }}
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-cell field">
+            Role:
+          </div>
+          <div class="table-cell">
+            {{ incident.assignedTo ? 'Role' : 'Unassigned' }}
+          </div>
+        </div>
+      </div>
+      <div class="table">
+        <div class="table-row">
+          <div class="table-cell field">
+            Status:
+          </div>
+          <div class="table-cell">
+            {{ incident.statusId | lookup: 'incidentStates' | async }}
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-cell field">
+            Status Date:
+          </div>
+          <div class="table-cell">
+            {{ incident.updatedDate | date: 'shortDate' }}
+          </div>
+        </div>
+      </div>
+      <div class="table">
+        <div class="table-row">
+          <div class="table-cell field">
+            Incident managed at:
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-cell">
+            FORT BRAGG, ARMY
+          </div>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutGap="0.5em" fxLayoutAlign="start center">
+        <app-incident-status-badge
+          [riskId]="incident.riskId"
+        ></app-incident-status-badge>
+        <div class="table">
+          <div class="table-row">
+            <div class="table-cell field">Date:</div>
+            <div class="table-cell">
+              {{ incident.incidentDate | date: 'shortDate' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <div
+    fxLayout="row"
+    fxLayout.lt-sm="column"
+    fxLayoutGap="1em"
+    class="full-width"
+  >
+    <mat-card fxFlex="calc(20% -1em)" fxFlex.lt-sm="auto">
+      <mat-card-content
+        fxLayout="row"
+        fxLayoutGap="0.75em"
+        fxLayoutAlign="start center"
+      >
+        <fa-duotone-icon [icon]="faShieldCheck"></fa-duotone-icon>
+        <span>
+          <span class="field">Safety Impact Level:</span>
+          {{ incident.safetyImpactLevel ? 'High' : 'Low' }}
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card fxFlex="calc(25% -1em)" fxFlex.lt-sm="auto">
+      <mat-card-content
+        fxLayout="row"
+        fxLayoutGap="0.75em"
+        fxLayoutAlign="start center"
+      >
+        <fa-duotone-icon [icon]="faShieldAlt"></fa-duotone-icon>
+        <span>
+          <span class="field">Law Enforcement Contacted:</span>
+          {{ incident.lawEnforcementContacted ? 'Yes' : 'No' }}
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card fxFlex="calc(25% -1em)" fxFlex.lt-sm="auto">
+      <mat-card-content
+        fxLayout="row"
+        fxLayoutGap="0.75em"
+        fxLayoutAlign="start center"
+      >
+        <fa-duotone-icon [icon]="faMapPin"></fa-duotone-icon>
+        <span>
+          <span class="field">On Installation:</span>
+          {{ incident.occurredOnAnInstallation ? 'Yes' : 'No' }}
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card
+      fxFlex="calc(25% -1em)"
+      fxFlex.lt-sm="auto"
+      *ngIf="incident.locationId"
+    >
+      <mat-card-content
+        fxLayout="row"
+        fxLayoutGap="0.75em"
+        fxLayoutAlign="start center"
+      >
+        <fa-duotone-icon [icon]="faMap"></fa-duotone-icon>
+        <span>
+          <span class="field">Location of Incident:</span>
+          {{ incident.locationId | lookup: 'locations' | async }}
+        </span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <div
+      fxLayout="column"
+      fxLayoutGap="1em"
+      [fxFlex]="
+        incident.artifacts?.length || incident.referralsTo?.length
+          ? '0 0 calc(70% - 1em)'
+          : 'auto'
+      "
+    >
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Involved Children</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-child-detail-list
+            *ngIf="incident.childIncidentDetails?.length"
+            [incidentId]="incident.id"
+            [childDetails]="incident.childIncidentDetails"
+            [showEducationSupportPlan]="false"
+            [isView]="true"
+          >
+          </app-child-detail-list>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            Description of Behavior
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="comment">{{
+          incident.allegations
+        }}</mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="incident.referralSource">
+        <mat-card-header>
+          <mat-card-title>
+            Report Source
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content fxLayout="column" fxLayoutGap="1em">
+          <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+            <div fxFlex="auto">
+              <span class="field">
+                Source:
+              </span>
+              {{
+                incident.referralSource.referralOrganizationId
+                  | lookup: 'referralSourceOrganizations'
+                  | async
+              }}
+            </div>
+            <div fxFlex="auto" *ngIf="incident.referralSource.referralPOC">
+              <span class="field">
+                Point of Contact:
+              </span>
+              {{ incident.referralSource.referralPOC }}
+            </div>
+            <div fxFlex="auto">
+              <span class="field">
+                Date:
+              </span>
+              {{ incident.referralSource.referralDate | date: 'shortDate' }}
+            </div>
+          </div>
+          <ng-container *ngIf="incident.referralSource.referralComments">
+            <span class="field">Comment:</span>
+            <span class="comment">{{
+              incident.referralSource.referralComments
+            }}</span>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxLayout="column" fxLayoutGap="1em" fxFlex="0 0 30%">
+      <mat-card *ngIf="incident.artifacts?.length">
+        <mat-card-header>
+          <mat-card-title>
+            Attachments
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-artifact-list
+            [artifacts]="incident.artifacts"
+            [isView]="true"
+          ></app-artifact-list>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-card-title class="referred-to">
+            Referred To
+          </mat-card-title>
+          <button
+            mat-stroked-button
+            class="stroked-button"
+            (click)="addReferralTo(incident.id)"
+          >
+            Add
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div
+            fxLayout="column"
+            fxLayoutGap="1em"
+            *ngIf="incident.referralsTo?.length; else noReferralTos"
+          >
+            <div>
+              <div class="field">Organization:</div>
+              <div>
+                {{
+                  incident.referralsTo[index].referralOrganizationId
+                    | lookup: 'referralToOrganizations'
+                    | async
+                }}
+              </div>
+            </div>
+            <div *ngIf="incident.referralsTo[index].referralPOC">
+              <div class="field">Point of Contact:</div>
+              <div>
+                {{ incident.referralsTo[index].referralPOC }}
+              </div>
+            </div>
+            <div>
+              <div class="field">Date:</div>
+              <div>
+                {{
+                  incident.referralsTo[index].referralDate | date: 'shortDate'
+                }}
+              </div>
+            </div>
+            <div *ngIf="incident.referralsTo[index].referralComments">
+              <div class="field">Comment:</div>
+              <div class="comment">{{
+                incident.referralsTo[index].referralComments
+              }}</div>
+            </div>
+
+            <div
+              fxLayout="row"
+              fxLayoutAlign="end center"
+              class="referred-to-pager"
+            >
+              <span>
+                Showing referral {{ index + 1 }} of
+                {{ incident.referralsTo.length }}
+              </span>
+              <button
+                mat-icon-button
+                (click)="previous()"
+                [disabled]="index <= 0"
+              >
+                <mat-icon svgIcon="previous"></mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="next(incident.referralsTo.length)"
+                [disabled]="index === incident.referralsTo.length - 1"
+              >
+                <mat-icon svgIcon="next"></mat-icon>
+              </button>
+            </div>
+          </div>
+          <ng-template #noReferralTos>
+            <h3>No Referrals</h3>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

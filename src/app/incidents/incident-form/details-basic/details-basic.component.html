@@ -1,0 +1,66 @@
+<div fxLayout="column" class="full-width" [formGroup]="detailsGroup">
+  <div class="slide-toggle" fxLayout="row" fxLayoutAlign="space-between center">
+    <span>On/Off Installation</span>
+    <div fxLayout="row" fxLayoutGap="2em" fxLayoutAlign="start center">
+      <mat-slide-toggle
+        #occurredOnAnInstallation
+        formControlName="occurredOnAnInstallation"
+        id="occurredOnAnInstallation"
+      ></mat-slide-toggle>
+      <span class="slide-toggle-response">{{
+        occurredOnAnInstallation.checked ? 'On' : 'Off'
+      }}</span>
+    </div>
+  </div>
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label class="required">Description of Behavior</mat-label>
+    <textarea
+      matInput
+      id="allegations"
+      rows="10"
+      formControlName="allegations"
+    ></textarea>
+    <mat-error>
+      <app-errors
+        [errors]="detailsGroup.get('allegations').errors"
+      ></app-errors>
+    </mat-error>
+  </mat-form-field>
+  <div fxLayout="column">
+    <h3 class="full-width">Attachments</h3>
+    <div
+      class="attachments"
+      *ngIf="detailsGroup.get('artifacts')?.value?.length"
+      formArrayName="artifacts"
+    >
+      <app-artifact-list
+        [artifacts]="artifacts.value"
+        (artifactRemoved)="removeArtifact($event.index, $event.artifactId)"
+      ></app-artifact-list>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Add Attachment</mat-label>
+      <app-file-input
+        #file
+        formControlName="fileBinary"
+        [multiple]="true"
+        (filesChanged)="addArtifacts($event)"
+      ></app-file-input>
+      <mat-icon
+        id="attachFile"
+        matSuffix
+        *ngIf="file.empty"
+        svgIcon="attach_file"
+      ></mat-icon>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="!file.empty"
+        (click)="file.clear($event)"
+      >
+        <mat-icon svgIcon="clear"></mat-icon>
+      </button>
+      <mat-hint>Any supporting documentation related to incident</mat-hint>
+    </mat-form-field>
+  </div>
+</div>

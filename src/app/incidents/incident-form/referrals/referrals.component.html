@@ -1,0 +1,78 @@
+<div class="full-width" [formGroup]="referralsGroup">
+  <div
+    formGroupName="referralSource"
+    class="full-width"
+    fxLayout="column"
+    fxLayoutGap="1em"
+  >
+    <div fxLayout="row" fxLayoutGap="1em">
+      <mat-form-field appearance="outline">
+        <mat-label class="required">Incident Report Source</mat-label>
+        <mat-select
+          formControlName="referralOrganizationId"
+          id="referralOrganizationIdIn"
+        >
+          <mat-option
+            *ngFor="let referralOrganization of referralOrganizations$ | async"
+            [value]="referralOrganization.id"
+          >
+            {{ referralOrganization.value }}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Choose the incident report source</mat-hint>
+        <mat-error
+          ><app-errors
+            [errors]="
+              referralsGroup.get('referralSource').get('referralOrganizationId')
+                .errors
+            "
+          ></app-errors>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Report Source POC</mat-label>
+        <input matInput id="referralPOCIn" formControlName="referralPOC" />
+        <mat-hint
+          >Enter the name of the report source point of contact</mat-hint
+        >
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Incident Report Comments</mat-label>
+      <textarea
+        aria-label="Incident Report Comments"
+        matInput
+        id="referralCommentsIn"
+        formControlName="referralComments"
+        rows="5"
+      ></textarea>
+    </mat-form-field>
+    <div fxLayout="row">
+      <mat-form-field appearance="outline" fxFlex="50">
+        <mat-label class="required">Date of Report</mat-label>
+        <input
+          matInput
+          id="referralDateIn"
+          [max]="maxDate"
+          [matDatepicker]="referralDateIn"
+          placeholder="MM/DD/YYYY"
+          formControlName="referralDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          id="referralDateInToggle"
+          [for]="referralDateIn"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #referralDateIn></mat-datepicker>
+        <mat-hint>Enter the date of report</mat-hint>
+        <mat-error>
+          <app-errors
+            [errors]="
+              referralsGroup.get('referralSource').get('referralDate').errors
+            "
+          ></app-errors>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

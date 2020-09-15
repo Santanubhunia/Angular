@@ -1,0 +1,69 @@
+h3 {
+  margin-block-end: 0;
+  padding-left: 25px;
+}
+
+hr {
+  border: 0;
+  margin: 0;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.container-logged-in {
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.container-not-logged-in {
+  position: absolute;
+  top: 80px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+}
+
+.sidenav {
+  width: 215px;
+  color: #9b9b9b;
+}
+
+.nav-item {
+  color: #9b9b9b;
+}
+
+.active {
+  color: #468ec6;
+  border-right: 5px solid #468ec6;
+  box-sizing: border-box;
+}
+
+.mat-drawer-content {
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.quick-actions {
+  margin: 24px 0;
+}
+
+.user-info {
+  padding: 2em 24px;
+  color: black;
+}
+
+.user-info span:not(:first-child) {
+  font-size: 0.75em;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 599px) {
+  .container-logged-in,
+  .container-not-logged-in {
+    top: 76px;
+  }
+}

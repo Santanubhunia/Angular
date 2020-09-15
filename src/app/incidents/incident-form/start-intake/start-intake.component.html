@@ -1,0 +1,96 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="start center"
+  class="full-width"
+  [formGroup]="startIntakeGroup"
+>
+  <div class="container">
+    <div
+      class="slide-toggle"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <span>Approximate Date</span>
+      <div fxLayout="row" fxLayoutGap="2em" fxLayoutAlign="start center">
+        <mat-slide-toggle
+          #approximateDate
+          formControlName="approximateDate"
+          id="approximateDate"
+          (change)="handleApproximateDate($event)"
+          [aria-label]="'Approximate Date'"
+        >
+        </mat-slide-toggle>
+        <span class="slide-toggle-response">{{
+          approximateDate.checked ? 'Yes' : 'No'
+        }}</span>
+      </div>
+    </div>
+  </div>
+  <mat-form-field
+    appearance="outline"
+    *ngIf="!approximateDate.checked; else approximate"
+  >
+    <mat-label class="required">Incident Date</mat-label>
+    <input
+      matInput
+      [max]="maxDate"
+      [matDatepicker]="incidentDate"
+      placeholder="MM/DD/YYYY"
+      formControlName="incidentDate"
+      id="incidentDate"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      id="incidentDateToggle"
+      [for]="incidentDate"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #incidentDate></mat-datepicker>
+    <mat-error>
+      <app-errors
+        [errors]="startIntakeGroup.get('incidentDate').errors"
+      ></app-errors>
+    </mat-error>
+  </mat-form-field>
+  <ng-template #approximate>
+    <div class="container">
+      <mat-error *ngIf="startIntakeGroup?.get('incidentDate').touched">
+        <app-errors
+          [errors]="startIntakeGroup?.get('incidentDate').errors"
+        ></app-errors>
+      </mat-error>
+    </div>
+    <div class="container" fxLayout="row" fxLayoutGap="1em">
+      <mat-form-field appearance="outline">
+        <mat-label class="required">Month</mat-label>
+        <mat-select [formControl]="month">
+          <mat-option *ngFor="let month of months" [value]="month.id">
+            {{ month.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label class="required">Year</mat-label>
+        <mat-select [formControl]="year">
+          <mat-option *ngFor="let year of years" [value]="year">
+            {{ year }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </ng-template>
+  <mat-form-field appearance="outline">
+    <mat-label class="required">Incident Category</mat-label>
+    <mat-select formControlName="riskId" id="riskId">
+      <mat-option *ngFor="let risk of risk$ | async" [value]="risk.id">
+        {{ risk.value }}
+      </mat-option>
+    </mat-select>
+    <mat-hint
+      >Categorize incident level as Normative, Cautionary, Problematic, or To Be
+      Determined</mat-hint
+    >
+    <mat-error>
+      <app-errors [errors]="startIntakeGroup.get('riskId').errors"></app-errors>
+    </mat-error>
+  </mat-form-field>
+</div>

@@ -1,0 +1,8 @@
+<div class="container" fxLayout="column">
+  <app-classified-banner></app-classified-banner>
+  <app-header (toggle)="snav.toggle()" (loggedOut)="snav.close()"></app-header>
+  <app-side-nav fxFlex="1 1 auto" #snav></app-side-nav>
+  <app-classified-banner
+    *ngIf="(isLoggedIn$ | async) === false"
+  ></app-classified-banner>
+</div>

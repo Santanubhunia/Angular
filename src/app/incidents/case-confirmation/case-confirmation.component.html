@@ -1,0 +1,23 @@
+<div fxLayout="column" class="full-height">
+  <h2 mat-dialog-title>Case Creation Complete</h2>
+  <mat-dialog-content>
+    Case {{ data.case.caseNumber }} Created.
+    <p>
+      The case for {{ data.childName }} was created. You may click on the button
+      to view the case or cancel to return to the incident.
+    </p>
+  </mat-dialog-content>
+  <span fxFlex="1 1 auto"></span>
+  <mat-dialog-actions align="end">
+    <button class="button" mat-raised-button (click)="close()">Cancel</button>
+    <button
+      class="button"
+      mat-raised-button
+      color="primary"
+      mat-dialog-close
+      [routerLink]="['/cases', data.case.id]"
+    >
+      View Case
+    </button>
+  </mat-dialog-actions>
+</div>

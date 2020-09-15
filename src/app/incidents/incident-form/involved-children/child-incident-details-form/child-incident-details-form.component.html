@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>Confirm Selection</h2>
+<div class="mat-typography sub-header">
+  Select the Involvement of this child as associated with this incident
+</div>
+<div [formGroup]="childDetailForm" fxLayout="column" fxLayoutGap="1em">
+  <div fxLayout="row">
+    <div
+      fxFlex="0 0 30%"
+      fxFlex.lt-sm="0 0 50%"
+      fxLayout="column"
+      fxLayoutGap="1em"
+    >
+      <div>Child:</div>
+      <div>Date of Birth:</div>
+      <div>Gender:</div>
+    </div>
+    <div
+      fxFlex="0 0 70%"
+      fxFlex.lt-sm="0 0 50%"
+      fxLayout="column"
+      fxLayoutGap="1em"
+    >
+      <div>
+        {{ data.childDetail.child.firstName }}
+        {{ data.childDetail.child.lastName }}
+      </div>
+      <div>{{ data.childDetail.child.dateOfBirth | date: 'MM/dd/yyyy' }}</div>
+      <div>
+        {{ data.childDetail.child.genderId | lookup: 'genders' | async }}
+      </div>
+    </div>
+  </div>
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label class="required">Involvement</mat-label>
+      <mat-select formControlName="childTypeId" id="childTypeId">
+        <mat-option
+          *ngFor="let childType of childTypes$ | async"
+          [value]="childType.id"
+        >
+          {{ childType.value }}
+        </mat-option>
+      </mat-select>
+      <mat-error>
+        <app-errors
+          [errors]="childDetailForm.get('childTypeId').errors"
+        ></app-errors>
+      </mat-error>
+    </mat-form-field>
+    <div
+      fxLayout="column"
+      fxLayoutGap="1em"
+      class="mb-1"
+      *ngIf="data.showEducationSupportPlan"
+    >
+      <label>Education Support Plan</label>
+      <mat-radio-group
+        formControlName="educationSupportPlan"
+        id="educationSupportPlan"
+        color="primary"
+      >
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
+        <mat-radio-button [value]="null">Unkown</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button class="button" mat-raised-button (click)="close()">Cancel</button>
+  <button
+    class="button"
+    mat-raised-button
+    color="primary"
+    (click)="save()"
+    [disabled]="childDetailForm.invalid"
+  >
+    Save
+  </button>
+</mat-dialog-actions>

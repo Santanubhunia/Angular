@@ -1,0 +1,60 @@
+<div [formGroup]="caseNotesForm">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="1em">
+      <span>Clinical Note</span>
+      <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="start center">
+        <mat-slide-toggle
+          #clinical
+          id="clinicalNote"
+          formControlName="clinical"
+        ></mat-slide-toggle>
+        <span class="slide-toggle-response">{{
+          clinical.checked ? 'Yes' : 'No'
+        }}</span>
+      </div>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label class="required">Relates To</mat-label>
+      <mat-select formControlName="commentTypeId" id="commentTypeId">
+        <mat-option
+          *ngFor="let relatesTo of relatesTo$ | async"
+          [value]="relatesTo.id"
+        >
+          {{ relatesTo.value }}
+        </mat-option>
+      </mat-select>
+      <mat-error>
+        <app-errors
+          [errors]="caseNotesForm.get('commentTypeId').errors"
+        ></app-errors>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label class="required">Comment</mat-label>
+    <textarea
+      matInput
+      id="comment"
+      placeholder="Comment"
+      rows="5"
+      formControlName="value"
+    ></textarea>
+    <mat-error>
+      <app-errors [errors]="caseNotesForm.get('value').errors"></app-errors>
+    </mat-error>
+  </mat-form-field>
+</div>
+<div>
+  <span fxFlex="1 1 auto"></span>
+  <button class="button" mat-raised-button (click)="close()">Cancel</button>
+  <button
+    class="button"
+    mat-raised-button
+    color="accent"
+    (click)="addNote()"
+    [disabled]="caseNotesForm.invalid"
+  >
+    {{ note ? 'Edit' : 'Add' }} Note
+  </button>
+</div>

@@ -1,0 +1,255 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$pbdb: (
+  50: #e7ecf1,
+  100: #c2cedb,
+  200: #9aaec4,
+  300: #728eac,
+  400: #53759a,
+  500: #355d88,
+  600: #305580,
+  700: #284b75,
+  800: #22416b,
+  900: #163058,
+  A100: #93baff,
+  A200: #6099ff,
+  A400: #2d79ff,
+  A700: #1468ff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff
+  )
+);
+
+$pbdb-accent: (
+  50: #f2e1e4,
+  100: #dfb4bb,
+  200: #ca838d,
+  300: #b4515f,
+  400: #a42b3d,
+  500: #94061b,
+  600: #8c0518,
+  700: #810414,
+  800: #770310,
+  900: #650208,
+  A100: #ff9597,
+  A200: #ff6265,
+  A400: #ff2f34,
+  A700: #ff151b,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff
+  )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$pbdb-primary: mat-palette($pbdb);
+$pbdb-accent: mat-palette($pbdb-accent, 500);
+
+// The warn palette is optional (defaults to red).
+$pbdb-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$pbdb-theme: mat-light-theme($pbdb-primary, $pbdb-accent, $pbdb-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($pbdb-theme);
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;display=swap');
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #fafafa;
+}
+
+.button {
+  width: 130px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+
+.header-form-field {
+  border-radius: 6px;
+
+  .mat-form-field-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    .mat-select {
+      width: 25px;
+
+      .mat-select-arrow-wrapper {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .mat-form-field-outline-start,
+  .mat-form-field-outline-end {
+    border: 0 !important;
+  }
+
+  .mat-form-field-prefix {
+    top: 0.5em !important;
+    color: #c4cad1;
+  }
+
+  .mat-form-field-infix {
+    margin-top: -5px !important;
+    padding: 10px 0.5em !important;
+  }
+
+  .mat-select-value,
+  .mat-select-value-text {
+    display: none !important;
+  }
+}
+
+.header-select {
+  margin-left: 20px !important;
+  margin-top: 23px !important;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.hide {
+  display: none !important;
+}
+
+.mat-horizontal-content-container {
+  padding-bottom: 0 !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.required::after {
+  content: ' *';
+  font-weight: bold;
+}
+
+.slide-toggle {
+  width: 50%;
+  margin-bottom: 1em;
+}
+
+.slide-toggle-response {
+  width: 25px;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.table {
+  display: table;
+  width: auto;
+}
+
+.table-row {
+  display: table-row;
+  width: auto;
+  line-height: 1.5em;
+}
+
+.table-cell {
+  display: table-cell;
+  white-space: nowrap;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.alert {
+  color: #fff;
+  font-size: 0.75rem;
+
+  &.error {
+    background-color: #c75856;
+  }
+
+  &.warning {
+    background-color: #e6ba30;
+  }
+
+  &.info {
+    background-color: #2196f3;
+  }
+
+  &.success {
+    background-color: #4dbb81;
+  }
+}
+
+.stroked-button {
+  color: #355d8e;
+}
+
+.no-padding-dialog {
+  .mat-dialog-container {
+    padding: 0;
+  }
+
+  mat-card {
+    margin-top: 0 !important;
+  }
+}

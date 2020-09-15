@@ -1,0 +1,143 @@
+::ng-deep .form-container {
+  margin-bottom: 24px;
+
+  mat-card {
+    margin-top: 2em;
+  }
+
+  .mat-card-header-text {
+    width: 100%;
+  }
+
+  mat-card-subtitle {
+    margin-top: 1em !important;
+  }
+
+  mat-card-content {
+    margin-top: 1em;
+  }
+
+  mat-form-field,
+  app-information {
+    max-width: 600px;
+    width: 100%;
+  }
+
+  mat-slide-toggle {
+    margin: 0.25em 0;
+  }
+
+  #attachFile {
+    transform: rotate(45deg);
+  }
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+
+  .steps {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .steps a {
+    color: #fafafa;
+    text-decoration: none;
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .steps div {
+    margin-left: 0;
+    height: 50px;
+    list-style-type: none;
+    border-right: 1em solid #fafafa;
+    position: relative;
+    background-color: #929292;
+  }
+
+  .steps div:not(.disabled) {
+    cursor: pointer;
+  }
+
+  .steps div:last-child {
+    border-right: none;
+  }
+
+  .steps div:nth-child(n + 2)::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    border-left: 14px solid #fafafa;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    width: 0;
+    height: 0;
+    content: '';
+  }
+
+  .steps div:not(:last-child)::after {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: -13.7px;
+    display: block;
+    border-left: 14px solid #929292;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    width: 0;
+    height: 0;
+    content: '';
+  }
+
+  .steps div::after {
+    border-left-color: #929292;
+  }
+
+  .steps div.completed {
+    background-color: #355d88;
+  }
+
+  .steps div.completed::after {
+    border-left-color: #355d88;
+  }
+
+  .steps div.active {
+    font-weight: 600;
+    background-color: #185494;
+  }
+  .steps div.active::after {
+    border-left-color: #185494;
+  }
+
+  .steps div:not(.active):not(.disabled):hover {
+    background-color: #4c85c2;
+  }
+
+  .steps div:not(.active):not(.disabled):hover::after {
+    border-left-color: #4c85c2;
+  }
+
+  .incident-number {
+    margin-top: -5px;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .title {
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  @media (max-width: 759px) {
+    .step-header {
+      margin: 0;
+    }
+  }
+}

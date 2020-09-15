@@ -1,0 +1,121 @@
+<div
+  fxFlexFill
+  fxLayout="column"
+  fxLayoutAlign="start center"
+  fxLayoutGap="1em"
+>
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    class="full-width"
+    *ngIf="!displayOnly"
+  >
+    <h1>Incident List</h1>
+    <button
+      class="button"
+      mat-raised-button
+      color="accent"
+      (click)="createNewIncident()"
+      aria-label="Create Incident"
+    >
+      <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="1em">
+        <mat-icon svgIcon="add"></mat-icon>
+        <span>Incident</span>
+        <div></div>
+      </div>
+    </button>
+  </div>
+  <div class="full-width">
+    <mat-form-field appearance="outline" *ngIf="!displayOnly">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" />
+    </mat-form-field>
+
+    <h3 *ngIf="displayOnly">Incident List</h3>
+
+    <mat-table
+      [dataSource]="datasource"
+      class="mat-elevation-z8"
+      matSort
+      matSortDisableClear
+    >
+      <ng-container matColumnDef="incidentNumber">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Incident Number</mat-header-cell
+        >
+        <mat-cell *matCellDef="let incident">
+          {{ incident.incidentNumber }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="incidentDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Incident Date</mat-header-cell
+        >
+        <mat-cell *matCellDef="let incident">
+          {{ incident.incidentDate | date }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="riskId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Category</mat-header-cell
+        >
+        <mat-cell *matCellDef="let incident">
+          {{ incident.riskId | lookup: 'risks' | async }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="statusId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Status</mat-header-cell
+        >
+        <mat-cell *matCellDef="let incident">
+          {{ incident.statusId | lookup: 'incidentStates' | async }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="occurredOnAnInstallation">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >On/Off Installation</mat-header-cell
+        >
+        <mat-cell *matCellDef="let incident">
+          {{ incident.occurredOnAnInstallation ? 'On' : 'Off' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="referralSource">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Referral Source</mat-header-cell
+        >
+        <mat-cell *matCellDef="let incident">
+          {{
+            incident.referralSource?.referralOrganizationId
+              | lookup: 'referralSourceOrganizations'
+              | async
+          }}
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="incident"
+        (click)="selectIncident(row)"
+      ></mat-row>
+    </mat-table>
+
+    <mat-card
+      *ngIf="!datasource.filteredData.length && (loading$ | async) !== true"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+    >
+      No records found
+    </mat-card>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      showFirstLastButtons
+      class="mat-elevation-z8"
+    ></mat-paginator>
+  </div>
+</div>

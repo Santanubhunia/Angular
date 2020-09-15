@@ -1,0 +1,108 @@
+<table class="full-width" aria-describedby="Child Incident Details">
+  <thead>
+    <tr [class.view]="isView">
+      <th class="text-left" scope="col">
+        Children
+      </th>
+      <th class="text-center" scope="col">Age</th>
+      <th class="text-center" scope="col">Sex</th>
+      <th class="text-left" scope="col">
+        Involvement
+      </th>
+      <ng-container *ngIf="isView">
+        <th class="text-center" scope="col">
+          Prior <br />
+          History
+        </th>
+        <th class="text-center" scope="col">Cases</th>
+      </ng-container>
+      <th scope="col">{{ isView ? 'Remove' : '' }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let childDetail of childDetails; let i = index">
+      <td>
+        <a (click)="viewChild(childDetail.child.id)"
+          >{{ childDetail.child.firstName }} {{ childDetail.child.lastName }}</a
+        >
+      </td>
+      <td class="text-center">{{ childDetail.ageAtIncident }}</td>
+      <td class="text-center">
+        {{ childDetail.child.genderId | lookup: 'genders' | async }}
+      </td>
+      <td>{{ childDetail.childTypeId | lookup: 'childTypes' | async }}</td>
+      <ng-container *ngIf="isView">
+        <td class="text-center">
+          <button mat-icon-button (click)="openPriorReports(childDetail.child)">
+            <fa-duotone-icon [icon]="faFolders" size="lg"></fa-duotone-icon>
+          </button>
+        </td>
+        <td>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <button
+              *ngIf="!childDetail.child.case; else case"
+              mat-stroked-button
+              fxLayoutAlign="center center"
+              type="button"
+              class="stroked-button case-button"
+              (click)="createCase(childDetail)"
+            >
+              Create Case
+            </button>
+            <ng-template #case>
+              <button
+                *ngIf="
+                  childDetail.child.case.childIncidentDetails.includes(
+                    childDetail.id
+                  );
+                  else linkCase
+                "
+                mat-stroked-button
+                fxLayoutAlign="center center"
+                type="button"
+                class="stroked-button case-button"
+                [routerLink]="['/cases', childDetail.child.case.id]"
+              >
+                {{ childDetail.child.case.caseNumber }}
+              </button>
+              <ng-template #linkCase>
+                <button
+                  mat-stroked-button
+                  fxLayoutAlign="center center"
+                  type="button"
+                  class="stroked-button case-button"
+                  (click)="
+                    addChildDetailToCase(
+                      incidentId,
+                      childDetail.child.case.id,
+                      childDetail
+                    )
+                  "
+                >
+                  Link to Case
+                </button>
+              </ng-template>
+            </ng-template>
+          </div>
+        </td>
+      </ng-container>
+      <td [ngClass]="{ 'text-center': isView, 'text-right': !isView }">
+        <button
+          *ngIf="!isView"
+          type="button"
+          mat-icon-button
+          (click)="editChildDetail(i, childDetail)"
+        >
+          <fa-duotone-icon [icon]="faPen" size="lg"></fa-duotone-icon>
+        </button>
+        <button
+          mat-icon-button
+          type="button"
+          (click)="deleteChildDetail(i, childDetail.id)"
+        >
+          <fa-duotone-icon [icon]="faTrashAlt" size="lg"></fa-duotone-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
